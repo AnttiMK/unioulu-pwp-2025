@@ -2,7 +2,7 @@
 # PROJECT NAME
 # Group information
 * Student 1. Name and email
-* Student 2. Name and email
+* Student 2. Eemeli Huotari, eemeli.huotari@student.oulu.fi
 * Student 3. Matias Paavilainen, matias.paavilainen@student.oulu.fi
 * Student 4. Markus Teuhola, markus.teuhola@student.oulu.fi
 
