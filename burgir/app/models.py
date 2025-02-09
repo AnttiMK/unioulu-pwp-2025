@@ -76,7 +76,7 @@ class Reservation(models.Model):
 
     def clean(self):
         """Ensure table capacity is suitable for the reservation"""
-        if self.table:
+        if hasattr(self, "table"):
             if self.number_of_people < self.table.min_people:
                 raise ValidationError(
                     f"Too few people for this table. Minimum required: {self.table.min_people}."
