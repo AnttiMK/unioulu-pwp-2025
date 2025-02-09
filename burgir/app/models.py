@@ -1,5 +1,6 @@
 from datetime import timedelta
 
+from django.core.validators import MinValueValidator
 from django.db import models
 from django.core.exceptions import ValidationError
 
@@ -62,7 +63,7 @@ class Order(models.Model):
 
 
 class Reservation(models.Model):
-    number_of_people = models.IntegerField()
+    number_of_people = models.IntegerField(validators=[MinValueValidator(1)])
     date_and_time = models.DateTimeField()
     duration = models.IntegerField()
 
@@ -74,9 +75,6 @@ class Reservation(models.Model):
     )
 
     def clean(self):
-        if self.number_of_people < 1:
-            raise ValidationError("Reservation must be for at least one person")
-
         """Ensure table capacity is suitable for the reservation"""
         if self.table:
             if self.number_of_people < self.table.min_people:
