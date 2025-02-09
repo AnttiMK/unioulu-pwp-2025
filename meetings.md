@@ -1,11 +1,14 @@
 # Meetings notes
 
 ## Meeting 1.
-* **DATE:**
+* **DATE:29.01.2025**
 * **ASSISTANTS:**
 
 ### Minutes
 *Summary of what was discussed during the meeting*
+- Further meetings in person
+- Maybe too many things, implement only main parts first
+- Related work needs more
 
 ### Action points
 *List here the actions points discussed with assistants*
