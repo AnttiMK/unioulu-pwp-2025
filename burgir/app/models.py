@@ -1,3 +1,5 @@
+from datetime import timedelta
+
 from django.db import models
 from django.core.exceptions import ValidationError
 
@@ -82,6 +84,20 @@ class Reservation(models.Model):
                 raise ValidationError(
                     f"Too many people for this table. Maximum allowed: {self.table.max_people}."
                 )
+
+            self._ensure_no_overlap()
+
+    def _ensure_no_overlap(self):
+        """Ensure that the reservation does not overlap with an existing reservation"""
+        end_time = self.date_and_time + timedelta(hours=self.duration)
+        overlapping = Reservation.objects.filter(
+            table=self.table,
+            date_and_time__lt=end_time,
+            date_and_time__gt=self.date_and_time,
+        ).exclude(id=self.id)
+
+        if overlapping.exists():
+            raise ValidationError("Reservation overlaps with existing reservations")
 
     def save(self, *args, **kwargs):
         """Run validation before saving the reservation"""
