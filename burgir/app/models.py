@@ -65,7 +65,7 @@ class Order(models.Model):
 class Reservation(models.Model):
     number_of_people = models.IntegerField(validators=[MinValueValidator(1)])
     date_and_time = models.DateTimeField()
-    duration = models.IntegerField()
+    duration = models.DurationField()
 
     user = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="reservations"
