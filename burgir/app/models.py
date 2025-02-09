@@ -29,7 +29,8 @@ class MenuItem(models.Model):
 
 
 class OrderItem(models.Model):
-    item = models.ForeignKey(MenuItem, on_delete=models.CASCADE, related_name="orders")
+    # needs to maybe have the order id, to make it easier to find the items for a specific order?
+    item = models.ForeignKey(MenuItem, on_delete=models.CASCADE)
     amount = models.IntegerField()
 
     def __str__(self):
