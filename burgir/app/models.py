@@ -29,9 +29,11 @@ class MenuItem(models.Model):
 
 
 class OrderItem(models.Model):
-    # needs to maybe have the order id, to make it easier to find the items for a specific order?
     item = models.ForeignKey(MenuItem, on_delete=models.CASCADE)
     amount = models.IntegerField()
+    order = models.ForeignKey(
+        "Order", on_delete=models.CASCADE, related_name="order_items", null=True
+    )
 
     def __str__(self):
         return f"{self.item} - {self.amount} pcs"
@@ -40,7 +42,6 @@ class OrderItem(models.Model):
 class Order(models.Model):
     status = models.CharField(max_length=64)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="orders")
-    order_items = models.ManyToManyField(OrderItem, related_name="orders")
 
     def total_price(self):
         return sum(
