@@ -74,6 +74,9 @@ class Reservation(models.Model):
     )
 
     def clean(self):
+        if self.number_of_people < 1:
+            raise ValidationError("Reservation must be for at least one person")
+
         """Ensure table capacity is suitable for the reservation"""
         if self.table:
             if self.number_of_people < self.table.min_people:
