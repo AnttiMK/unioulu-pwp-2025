@@ -90,7 +90,7 @@ class Reservation(models.Model):
 
     def _ensure_no_overlap(self):
         """Ensure that the reservation does not overlap with an existing reservation"""
-        end_time = self.date_and_time + timedelta(hours=self.duration)
+        end_time = self.date_and_time + self.duration
         overlapping = Reservation.objects.filter(
             table=self.table,
             date_and_time__lt=end_time,
