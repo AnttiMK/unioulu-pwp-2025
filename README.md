@@ -21,3 +21,15 @@ source .venv/bin/activate
 
 pip install -r requirements.txt
 ```
+
+## Create database (if it doesn't exist)
+```bash
+python manage.py migrate
+```
+
+## Run Django development server
+```bash
+python manage.py runserver
+```
+
+
