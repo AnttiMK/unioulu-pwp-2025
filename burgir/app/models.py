@@ -92,9 +92,10 @@ class Reservation(models.Model):
         """Ensure that the reservation does not overlap with an existing reservation"""
         end_time = self.date_and_time + self.duration
         overlapping = Reservation.objects.filter(
-            table=self.table,
+            table=self.table
+        ).filter(
             date_and_time__lt=end_time,
-            date_and_time__gt=self.date_and_time,
+            date_and_time__gt=self.date_and_time - models.F("duration")
         ).exclude(id=self.id)
 
         if overlapping.exists():
