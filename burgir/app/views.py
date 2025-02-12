@@ -1,5 +1,5 @@
-from django.shortcuts import render, HttpResponse
-from .models import Table, User, Reservation, MenuItem, Order
+from django.shortcuts import render
+from .models import Table, Reservation, MenuItem, Order
 
 # Create your views here.
 def home(request):
