@@ -32,4 +32,10 @@ python manage.py migrate
 python manage.py runserver
 ```
 
+## Populate the database through the Django Admin Panel
+```bash
+python manage.py createsuperuser
+```
+Log in with the newly created credentials to the /admin endpoint.
 
+**Register a model to admin.py to edit its content in the admin panel!**
