@@ -22,8 +22,14 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-## Create database (if it doesn't exist)
+## Create the database (if it doesn't exist)
 ```bash
+python manage.py migrate
+```
+
+## The following commands must be run whenever adding or making changes to database models
+```bash
+python manage.py makemigrations
 python manage.py migrate
 ```
 
