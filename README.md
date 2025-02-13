@@ -39,9 +39,10 @@ python manage.py runserver
 ```
 
 ## Populate the database through the Django Admin Panel
+Run this command to create credentials that can be used for the admin panel:
 ```bash
 python manage.py createsuperuser
 ```
-Log in with the newly created credentials to the /admin endpoint.
+Log in with the newly created credentials at the /admin endpoint.
 
-**Register a model to admin.py to edit its content in the admin panel!**
+**In the project, a model must be registered to admin.py to edit its content in the admin panel!**
