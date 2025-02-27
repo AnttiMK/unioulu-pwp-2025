@@ -1,0 +1,18 @@
+{% extends "base.html" %} {% block content %}
+{% if not reservations %}
+<h2>No reservations by {{user_name}}</h2>
+{% else %}
+<h2>Reservations by {{user_name}}</h2>
+<hr>
+<ul>
+    {% for reservation in reservations %}
+    <li>
+        <strong>Reserved by:</strong> {{ reservation.user.name }}
+        <br> <strong>Table: </strong> #{{ reservation.table.id }}
+        <br> <strong>Date:</strong> {{ reservation.date_and_time }}
+        <br> <strong>Duration:</strong> {{ reservation.duration }}
+    </li>
+    {% endfor %}
+</ul>
+{% endif %}
+{% endblock %}

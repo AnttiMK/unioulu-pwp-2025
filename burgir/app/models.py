@@ -52,6 +52,13 @@ class Order(models.Model):
             for order_item in self.order_items.all()
         )
 
+    def all_items_list(self):
+        items = []
+        for order_item in self.order_items.all():
+            item = f"{order_item.item.name} - {order_item.amount} pcs - {order_item.item.price * order_item.amount} €"
+            items.append(item)
+        return items
+
     def all_items(self):
         return (
             ", ".join(
@@ -91,12 +98,14 @@ class Reservation(models.Model):
     def _ensure_no_overlap(self):
         """Ensure that the reservation does not overlap with an existing reservation"""
         end_time = self.date_and_time + self.duration
-        overlapping = Reservation.objects.filter(
-            table=self.table
-        ).filter(
-            date_and_time__lt=end_time,
-            date_and_time__gt=self.date_and_time - models.F("duration")
-        ).exclude(id=self.id)
+        overlapping = (
+            Reservation.objects.filter(table=self.table)
+            .filter(
+                date_and_time__lt=end_time,
+                date_and_time__gt=self.date_and_time - models.F("duration"),
+            )
+            .exclude(id=self.id)
+        )
 
         if overlapping.exists():
             raise ValidationError("Reservation overlaps with existing reservations")
