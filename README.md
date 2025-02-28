@@ -38,6 +38,12 @@ python manage.py migrate
 python manage.py runserver
 ```
 
+## Run pylint
+```bash
+cd burgir
+pylint .
+```
+
 ## Populate the database through the Django Admin Panel
 Run this command to create credentials that can be used for the admin panel:
 ```bash
