@@ -29,4 +29,7 @@ urlpatterns = [
         views.orders_by_user,
         name="Orders by user",
     ),
+    path("users/", views.users, name="All users"),
+    path("users/user/<str:user>/", views.user, name="User"),
+    path("users/user/<int:user>", views.user, name="User"),
 ]

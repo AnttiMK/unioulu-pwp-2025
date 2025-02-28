@@ -12,6 +12,24 @@ class User(models.Model):
     def __str__(self):
         return self.name
 
+    def serialize(self, short=False):
+        doc = {
+            "id": self.id,
+            "name": self.name,
+        }
+        if not short:
+            orders = []
+            for order in Order.objects.filter(user=self).all():
+                orders.append(order.serialize())
+            reservations = []
+            for reservation in Reservation.objects.filter(user=self).all():
+                reservations.append(reservation.serialize())
+
+            doc["orders"] = orders
+            doc["reservations"] = reservations
+
+        return doc
+
 
 class Table(models.Model):
     min_people = models.IntegerField()
@@ -30,6 +48,14 @@ class MenuItem(models.Model):
     def __str__(self):
         return f"{self.name} - {self.description} - {self.price:.2f}€"
 
+    def serialize(self):
+        return {
+            "name": self.name,
+            "description": self.description,
+            "type": self.type,
+            "price": self.price,
+        }
+
 
 class OrderItem(models.Model):
     item = models.ForeignKey(MenuItem, on_delete=models.CASCADE)
@@ -40,6 +66,14 @@ class OrderItem(models.Model):
 
     def __str__(self):
         return f"{self.item} - {self.amount} pcs"
+
+    def serialize(self):
+        return {
+            "name": self.item.name,
+            "amount": self.amount,
+            "price": self.item.price,
+            "total_price": self.item.price * self.amount,
+        }
 
 
 class Order(models.Model):
@@ -52,12 +86,18 @@ class Order(models.Model):
             for order_item in self.order_items.all()
         )
 
-    def all_items_list(self):
+    def serialize(self):
         items = []
         for order_item in self.order_items.all():
-            item = f"{order_item.item.name} - {order_item.amount} pcs - {order_item.item.price * order_item.amount} €"
-            items.append(item)
-        return items
+            items.append(order_item.serialize())
+
+        return {
+            "order_num": self.id,
+            "status": self.status,
+            "user": self.user.name,
+            "order_items": items,
+            "order_total_price": self.total_price(),
+        }
 
     def all_items(self):
         return (
@@ -80,6 +120,15 @@ class Reservation(models.Model):
     table = models.ForeignKey(
         Table, on_delete=models.CASCADE, related_name="reservations"
     )
+
+    def serialize(self):
+        return {
+            "reserver": self.user.name,
+            "table": self.table.id,
+            "number of people": self.number_of_people,
+            "date_and_time": self.date_and_time,
+            "duration": self.duration,
+        }
 
     def clean(self):
         """Ensure table capacity is suitable for the reservation"""
