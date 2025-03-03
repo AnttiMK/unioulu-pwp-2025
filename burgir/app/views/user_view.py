@@ -1,22 +1,25 @@
 from django.core.exceptions import ObjectDoesNotExist
 from django.views.decorators.csrf import csrf_exempt
-from ..models import User
 import json
 from django.http import (
+    HttpResponseNotAllowed,
     JsonResponse,
     HttpResponseNotFound,
     HttpResponseBadRequest,
     HttpResponseServerError,
-    HttpResponse
+    HttpResponse,
 )
+from ..models import User
 
 
-def get_all(_):
+def get_all(request):
+    if request.method != "GET":
+        return HttpResponseNotAllowed(["GET"], "Only GET is allowed!")
     """
     Returns all users in the database.
 
     Args:
-        _ (HttpRequest): Django HTTP request object (unused)
+        request (HttpRequest): Django HTTP request object
 
     Returns:
         JsonResponse: JSON containing all users with a short representation and total count
@@ -28,12 +31,14 @@ def get_all(_):
     return JsonResponse(users)
 
 
-def get_by_identifier(_, user_identifier):
+def get_by_identifier(request, user_identifier):
+    if request.method != "GET":
+        return HttpResponseNotAllowed(["GET"], "Only GET is allowed!")
     """
     Returns a specific user by their ID or name.
 
     Args:
-        _ (HttpRequest): Django HTTP request object (unused)
+        request (HttpRequest): Django HTTP request object
         user_identifier (str): User ID (numeric) or name to search for
 
     Returns:
@@ -49,11 +54,11 @@ def get_by_identifier(_, user_identifier):
 
     return JsonResponse(user.serialize())
 
-@csrf_exempt
 
+@csrf_exempt
 def create_user(request):
     if request.method != "POST":
-        return HttpResponseBadRequest("Only POST is allowed.")
+        return HttpResponseNotAllowed(["POST"], "Only POST is allowed!")
 
     try:
         data = json.loads(request.body)
@@ -73,10 +78,11 @@ def create_user(request):
     except Exception as e:
         return HttpResponseServerError(f"Error creating user: {str(e)}")
 
+
 @csrf_exempt
 def delete_user(request, id):
     if request.method != "DELETE":
-        return HttpResponseBadRequest("Only DELETE is allowed.")
+        return HttpResponseNotAllowed(["PUT"], "Only PUT is allowed!")
 
     try:
         user = User.objects.get(id=id)

@@ -1,23 +1,24 @@
 from django.core.exceptions import ObjectDoesNotExist
-from django.test import TransactionTestCase
 from django.views.decorators.csrf import csrf_exempt
 import json
 from django.http import (
+    HttpResponseNotAllowed,
     JsonResponse,
     HttpResponseNotFound,
     HttpResponseBadRequest,
     HttpResponseServerError,
-    HttpResponse
 )
 from ..models import Order, User, OrderItem, MenuItem
 
 
-def get_all(_):
+def get_all(request):
+    if request.method != "GET":
+        return HttpResponseNotAllowed(["GET"], "Only GET is allowed!")
     """
     Returns all orders in the database grouped by status.
 
     Args:
-        _ (HttpRequest): Django HTTP request object (unused)
+        request (HttpRequest): Django HTTP request object
 
     Returns:
         JsonResponse: JSON containing all orders organized by their status
@@ -36,12 +37,14 @@ def get_all(_):
     return JsonResponse(orders)
 
 
-def get_by_status(_, status):
+def get_by_status(request, status):
+    if request.method != "GET":
+        return HttpResponseNotAllowed(["GET"], "Only GET is allowed!")
     """
     Returns the order with a specific status.
 
     Args:
-        _ (HttpRequest): Django HTTP request object (unused)
+        request (HttpRequest): Django HTTP request object
         status (str): Expects order status, valid status are
         "ready", "preparing", "pending", "registered".
 
@@ -59,12 +62,14 @@ def get_by_status(_, status):
     return JsonResponse(orders)
 
 
-def get_by_id(_, order_id: int):
+def get_by_id(request, order_id: int):
+    if request.method != "GET":
+        return HttpResponseNotAllowed(["GET"], "Only GET is allowed!")
     """
     Returns the order with a specific id.
 
     Args:
-        _ (HttpRequest): Django HTTP request object (unused)
+        request (HttpRequest): Django HTTP request object
         order_id (int): Order id to find.
 
     Returns:
@@ -78,12 +83,14 @@ def get_by_id(_, order_id: int):
     return JsonResponse(order.serialize())
 
 
-def get_by_user(_, user_name: str):
+def get_by_user(request, user_name: str):
+    if request.method != "GET":
+        return HttpResponseNotAllowed(["GET"], "Only GET is allowed!")
     """
     Returns the orders made by the specified user.
 
     Args:
-        _ (HttpRequest): Django HTTP request object (unused)
+        request (HttpRequest): Django HTTP request object
         user (str): The name of the user, who's orders to find.
 
     Returns:
@@ -100,10 +107,11 @@ def get_by_user(_, user_name: str):
 
     return JsonResponse(orders)
 
+
 @csrf_exempt
 def create_order(request):
     if request.method != "POST":
-        return HttpResponseBadRequest("Only POST is allowed.")
+        return HttpResponseNotAllowed(["POST"], "Only POST is allowed!")
 
     try:
         data = json.loads(request.body)
@@ -112,14 +120,19 @@ def create_order(request):
         status = data.get("status", "pending")
 
         if not user_name or not order_items:
-            return HttpResponseBadRequest("Missing required fields: user and order_items.")
+            return HttpResponseBadRequest(
+                "Missing required fields: user and order_items."
+            )
 
         try:
             user = User.objects.get(name=user_name)
         except User.DoesNotExist:
             return HttpResponseNotFound("User not found.")
 
-        new_order = Order.objects.create(user=user, status=status,)
+        new_order = Order.objects.create(
+            user=user,
+            status=status,
+        )
 
         for item in order_items:
             item_id = item.get("item_id")
@@ -130,7 +143,11 @@ def create_order(request):
             except MenuItem.DoesNotExist:
                 return HttpResponseBadRequest(f"Menu item with id {item_id} not found.")
 
-            OrderItem.objects.create(order=new_order, item=menu_item, amount=amount,)
+            OrderItem.objects.create(
+                order=new_order,
+                item=menu_item,
+                amount=amount,
+            )
 
         return JsonResponse(new_order.serialize(), status=201)
 
@@ -138,10 +155,12 @@ def create_order(request):
         return HttpResponseBadRequest("Invalid JSON format.")
     except Exception as e:
         return HttpResponseServerError(f"Error creating order: {str(e)}")
-@csrf_exempt    
+
+
+@csrf_exempt
 def update_order(request, id):
-    if request.method not in ["PUT"]:
-        return HttpResponseBadRequest("Only PUT is allowed.")
+    if request.method != "PUT":
+        return HttpResponseNotAllowed(["PUT"], "Only PUT is allowed!")
     try:
         try:
             order = Order.objects.get(id=id)
@@ -162,13 +181,19 @@ def update_order(request, id):
                 try:
                     menu_item = MenuItem.objects.get(id=item_id)
                 except MenuItem.DoesNotExist:
-                    return HttpResponseBadRequest(f"Menu item with id {item_id} not found.")
+                    return HttpResponseBadRequest(
+                        f"Menu item with id {item_id} not found."
+                    )
                 try:
                     order_item = OrderItem.objects.get(order=order, item=menu_item)
                     order_item.amount = amount
                     order_item.save()
                 except OrderItem.DoesNotExist:
-                    OrderItem.objects.create(order=order, item=menu_item, amount=amount,)
+                    OrderItem.objects.create(
+                        order=order,
+                        item=menu_item,
+                        amount=amount,
+                    )
         order.save()
         return JsonResponse(order.serialize(), status=200)
 
@@ -176,10 +201,12 @@ def update_order(request, id):
         return HttpResponseBadRequest("Invalid JSON format.")
     except Exception as e:
         return HttpResponseServerError(f"Error updating order: {str(e)}")
-@csrf_exempt   
+
+
+@csrf_exempt
 def delete_order(request, id):
     if request.method != "DELETE":
-        return HttpResponseBadRequest("Only DELETE is allowed.")
+        return HttpResponseNotAllowed(["DELETE"], "Only DELETE is allowed!")
 
     try:
         try:

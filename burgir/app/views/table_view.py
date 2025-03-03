@@ -1,13 +1,15 @@
 from ..models import Table
-from django.http import JsonResponse
+from django.http import HttpResponseNotAllowed, JsonResponse
 
 
 def get_all(request):
+    if request.method != "GET":
+        return HttpResponseNotAllowed(["GET"], "Only GET is allowed!")
     """
     Returns all tables and total number of tables.
 
     Args:
-        _ (HttpRequest): Django HTTP request object (unused)
+        _ (HttpRequest): Django HTTP request object
 
     Returns:
         JsonResponse: JSON containing all the tables

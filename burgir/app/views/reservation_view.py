@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+from time import strftime
 from django.core.exceptions import ObjectDoesNotExist
 from ..models import Reservation, Table, User
 from django.views.decorators.csrf import csrf_exempt
@@ -9,15 +10,18 @@ from django.http import (
     HttpResponseNotFound,
     HttpResponseBadRequest,
     HttpResponseServerError,
+    HttpResponseNotAllowed,
 )
 
 
-def get_all(_):
+def get_all(request):
+    if request.method != "GET":
+        return HttpResponseNotAllowed(["GET"], "Only GET is allowed!")
     """
     Returns all reservations in the database.
 
     Args:
-        _ (HttpRequest): Django HTTP request object (unused)
+        request (HttpRequest): Django HTTP request object (unused)
 
     Returns:
         JsonResponse: JSON containing all reservations with their count
@@ -31,12 +35,14 @@ def get_all(_):
     return JsonResponse(reservations)
 
 
-def get_by_time_status(_, time_status: str):
+def get_by_time_status(request, time_status: str):
+    if request.method != "GET":
+        return HttpResponseNotAllowed(["GET"], "Only GET is allowed!")
     """
     Returns reservations filtered by their time status (upcoming, current, or past).
 
     Args:
-        _ (HttpRequest): Django HTTP request object (unused)
+        request (HttpRequest): Django HTTP request object (unused)
         time_status (str): The time status - "upcoming", "current" or "past"
 
     Returns:
@@ -46,18 +52,44 @@ def get_by_time_status(_, time_status: str):
     valid_time_status = ["upcoming", "current", "past"]
     if time_status not in valid_time_status:
         return HttpResponseBadRequest(f"Time must be one of: {valid_time_status}")
+
     reservations = {"reservation_count": 0, "reservations": []}
 
-    current_time = datetime.now()
+    current_time = timezone.now()
+    print(current_time)
+
+    all_future = Reservation.objects.filter(date_and_time__gt=current_time).all()
+    all_past = Reservation.objects.filter(date_and_time__lt=current_time).all()
+
+    smallest_fut_delta = timedelta(days=99999)
+    smallest_past_delta = timedelta(days=99999)
+
+    closest_future = 0
+    closest_past = 0
+
+    # find the closest future and past reservations
+    for fut in all_future:
+        fut_delta = fut.date_and_time - current_time
+        if fut_delta < smallest_fut_delta:
+            closest_future = fut.date_and_time
+
+    for past in all_past:
+        past_delta = current_time - past.date_and_time
+        if past_delta < smallest_past_delta:
+            closest_past = past.date_and_time - past.duration
 
     if time_status == "upcoming":
-        query = Reservation.objects.filter(date_and_time__gt=current_time).all()
+        query = Reservation.objects.filter(date_and_time__gte=closest_future).all()
+
     elif time_status == "current":
-        query = Reservation.objects.exclude(date_and_time__gt=current_time).exclude(
-            date_and_time__lt=current_time
+        query = (
+            Reservation.objects.filter(date_and_time__gt=closest_past)
+            .filter(date_and_time__lt=closest_future)
+            .all()
         )
-    else:
-        query = Reservation.objects.filter(date_and_time__lt=current_time)
+
+    elif time_status == "past":
+        query = Reservation.objects.filter(date_and_time__lte=closest_past).all()
 
     for reservation in query:
         reservations["reservation_count"] += 1
@@ -66,12 +98,14 @@ def get_by_time_status(_, time_status: str):
     return JsonResponse(reservations)
 
 
-def get_by_id(_, reservation_id: int):
+def get_by_id(request, reservation_id: int):
+    if request.method != "GET":
+        return HttpResponseNotAllowed(["GET"], "Only GET is allowed!")
     """
     Returns a specific reservation by its ID.
 
     Args:
-        _ (HttpRequest): Django HTTP request object (unused)
+        request (HttpRequest): Django HTTP request object (unused)
         reservation_id (int): The unique identifier of the reservation
 
     Returns:
@@ -87,12 +121,14 @@ def get_by_id(_, reservation_id: int):
     return JsonResponse(reservation.serialize())
 
 
-def get_by_user(_, user_name: str):
+def get_by_user(request, user_name: str):
+    if request.method != "GET":
+        return HttpResponseNotAllowed(["GET"], "Only GET is allowed!")
     """
     Returns all reservations for a specific user.
 
     Args:
-        _ (HttpRequest): Django HTTP request object (unused)
+        request (HttpRequest): Django HTTP request object (unused)
         user_name (str): Username to filter reservations by
 
     Returns:
@@ -113,7 +149,7 @@ def get_by_user(_, user_name: str):
 @csrf_exempt
 def create_reservation(request):
     if request.method != "POST":
-        return HttpResponseBadRequest("Only POST is allowed.")
+        return HttpResponseNotAllowed(["POST"], "Only POST is allowed!")
 
     try:
         data = json.loads(request.body)
@@ -123,7 +159,9 @@ def create_reservation(request):
         date_and_time = data.get("date_and_time")
         duration = data.get("duration")
 
-        if not (user_name and table_id and number_of_people and date_and_time and duration):
+        if not (
+            user_name and table_id and number_of_people and date_and_time and duration
+        ):
             return HttpResponseBadRequest("Missing required fields.")
         try:
             user = User.objects.get(name=user_name)
@@ -134,11 +172,18 @@ def create_reservation(request):
         except Table.DoesNotExist:
             return HttpResponseNotFound("Table not found.")
         naive_datetime = datetime.strptime(date_and_time, "%Y-%m-%d %H:%M:%S")
-        aware_datetime = timezone.make_aware(naive_datetime, timezone.get_current_timezone())
+        aware_datetime = timezone.make_aware(
+            naive_datetime, timezone.get_current_timezone()
+        )
         hours, minutes, seconds = map(int, duration.split(":"))
         duration_timedelta = timedelta(hours=hours, minutes=minutes, seconds=seconds)
 
-        new_reservation = Reservation.objects.create(user=user, table=table, number_of_people=number_of_people, date_and_time=aware_datetime, duration=duration_timedelta
+        new_reservation = Reservation.objects.create(
+            user=user,
+            table=table,
+            number_of_people=number_of_people,
+            date_and_time=aware_datetime,
+            duration=duration_timedelta,
         )
         return JsonResponse(new_reservation.serialize(), status=201)
     except json.JSONDecodeError:
@@ -147,11 +192,12 @@ def create_reservation(request):
         return HttpResponseBadRequest("Invalid date/time or duration format.")
     except Exception as e:
         return HttpResponseServerError(f"Error creating reservation: {str(e)}")
-    
+
+
 @csrf_exempt
 def update_reservation(request, id):
     if request.method != "PUT":
-        return HttpResponseBadRequest("Only PUT is allowed.")
+        return HttpResponseNotAllowed(["PUT"], "Only PUT is allowed!")
 
     try:
         data = json.loads(request.body)
@@ -169,11 +215,15 @@ def update_reservation(request, id):
 
         if date_and_time:
             naive_datetime = datetime.strptime(date_and_time, "%Y-%m-%d %H:%M:%S")
-            reservation.date_and_time = timezone.make_aware(naive_datetime, timezone.get_current_timezone())
+            reservation.date_and_time = timezone.make_aware(
+                naive_datetime, timezone.get_current_timezone()
+            )
 
         if duration:
             hours, minutes, seconds = map(int, duration.split(":"))
-            reservation.duration = timedelta(hours=hours, minutes=minutes, seconds=seconds)
+            reservation.duration = timedelta(
+                hours=hours, minutes=minutes, seconds=seconds
+            )
 
         reservation.save()
         return JsonResponse(reservation.serialize(), status=200)
@@ -184,17 +234,19 @@ def update_reservation(request, id):
         return HttpResponseBadRequest("Invalid date/time or duration format.")
     except Exception as e:
         return HttpResponseServerError(f"Error updating reservation: {str(e)}")
-    
+
 
 @csrf_exempt
 def delete_reservation(request, id):
     if request.method != "DELETE":
-        return HttpResponseBadRequest("Only DELETE is allowed.")
+        return HttpResponseNotAllowed(["DELETE"], "Only DELETE is allowed!")
 
     try:
         reservation = Reservation.objects.get(id=id)
         reservation.delete()
-        return JsonResponse({"message": f"Reservation {id} deleted successfully."}, status=204)
+        return JsonResponse(
+            {"message": f"Reservation {id} deleted successfully."}, status=204
+        )
 
     except Reservation.DoesNotExist:
         return HttpResponseNotFound("Reservation not found.")

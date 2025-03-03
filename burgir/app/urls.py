@@ -24,18 +24,8 @@ urlpatterns = [
         user_view.get_by_identifier,
         name="User by id or name",
     ),
-    path(
-        "users/create/", 
-        user_view.create_user, 
-        name="Create user"
-        ),
-
-    path(
-        "users/delete/<int:id>/", 
-        user_view.delete_user, 
-        name="Delete user"
-        ),
-
+    path("users/create/", user_view.create_user, name="Create user"),
+    path("users/delete/<int:id>/", user_view.delete_user, name="Delete user"),
     # TABLE
     path(
         "tables/",
@@ -60,19 +50,19 @@ urlpatterns = [
         name="All reservations",
     ),
     path(
-        "reservations/create/", 
-         reservation_view.create_reservation, 
-         name="Create reservation"
+        "reservations/create/",
+        reservation_view.create_reservation,
+        name="Create reservation",
     ),
     path(
-        "reservations/update/<int:id>/", 
-         reservation_view.update_reservation, 
-         name="Update reservation"
+        "reservations/update/<int:id>/",
+        reservation_view.update_reservation,
+        name="Update reservation",
     ),
     path(
-        "reservations/delete/<int:id>/", 
-         reservation_view.delete_reservation, 
-         name="Delete reservation"
+        "reservations/delete/<int:id>/",
+        reservation_view.delete_reservation,
+        name="Delete reservation",
     ),
     path(
         "reservations/<str:user_name>/",
@@ -84,6 +74,11 @@ urlpatterns = [
         reservation_view.get_by_id,
         name="Reservation by id",
     ),
+    path(
+        "reservations/status/<str:time_status>/",
+        reservation_view.get_by_time_status,
+        name="Get reservation by time status, past current, upcoming",
+    ),
     # ORDERS
     path(
         "orders/",
@@ -91,19 +86,20 @@ urlpatterns = [
         name="All orders",
     ),
     path(
-        "orders/create/", 
-        order_view.create_order, 
-        name="Create order"
-        ),
+        "orders/create/",
+        order_view.create_order,
+        name="Create order",
+    ),
     path(
-        "orders/update/<int:id>/", 
-        order_view.update_order, 
-        name="Update order"
-        ),
+        "orders/update/<int:id>/",
+        order_view.update_order,
+        name="Update order",
+    ),
     path(
-        "orders/delete/<int:id>/", 
-        order_view.delete_order, 
-        name="Delete order"),
+        "orders/delete/<int:id>/",
+        order_view.delete_order,
+        name="Delete order",
+    ),
     path(
         "orders/<str:user_name>/",
         order_view.get_by_user,

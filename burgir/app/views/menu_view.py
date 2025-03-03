@@ -1,13 +1,15 @@
-from django.http import JsonResponse
+from django.http import HttpResponseNotAllowed, JsonResponse
 from ..models import MenuItem
 
 
-def get_menu(_):
+def get_menu(request):
+    if request.method != "GET":
+        return HttpResponseNotAllowed(["GET"], "Only GET is allowed!")
     """
     Returns the complete menu with items grouped by type.
 
     Args:
-        _ (HttpRequest): Django HTTP request object (unused)
+        request (HttpRequest): Django HTTP request object
 
     Returns:
         JsonResponse: JSON containing all menu items organized by their type
@@ -24,12 +26,14 @@ def get_menu(_):
     return JsonResponse(menu_by_type)
 
 
-def get_items_by_type(_, menu_item_type: str):
+def get_items_by_type(request, menu_item_type: str):
+    if request.method != "GET":
+        return HttpResponseNotAllowed(["GET"], "Only GET is allowed!")
     """
     Returns menu items filtered by their type.
 
     Args:
-        _ (HttpRequest): Django HTTP request object (unused)
+        request (HttpRequest): Django HTTP request object
         menu_item_type (str): The type of menu items to filter by (e.g., "drink", "main course")
 
     Returns:
