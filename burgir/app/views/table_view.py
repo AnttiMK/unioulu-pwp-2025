@@ -1,5 +1,13 @@
 from ..models import Table
-from django.http import HttpResponseNotAllowed, JsonResponse
+from django.http import (
+    JsonResponse,
+    HttpResponseNotFound,
+    HttpResponseBadRequest,
+    HttpResponseNotAllowed,
+    HttpResponseServerError,
+    HttpResponse
+)
+import json
 
 
 def get_all(request):
@@ -22,8 +30,25 @@ def get_all(request):
     return JsonResponse(tables)
 
 
-def create_table(request, id):
-    pass
+def create_table(request):
+    if request.method != "POST":
+        return HttpResponseBadRequest("Only POST is allowed.")
+
+    try:
+        data = json.loads(request.body)
+        min_people = data.get("min_people")
+        max_people = data.get("max_people")
+
+        if min_people is None or max_people is None:
+            return HttpResponseBadRequest("Missing required fields: 'min_people' and 'max_people'.")
+
+        new_table = Table.objects.create(min_people=min_people, max_people=max_people)
+        return JsonResponse(new_table.serialize(), status=201)
+
+    except json.JSONDecodeError:
+        return HttpResponseBadRequest("Invalid JSON format.")
+    except Exception as e:
+        return HttpResponseServerError(f"Error creating table: {str(e)}")
 
 
 def update_table(request, id):

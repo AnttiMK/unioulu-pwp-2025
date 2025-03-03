@@ -32,11 +32,21 @@ urlpatterns = [
         table_view.get_all,
         name="Tables",
     ),
+    path(
+        "tables/create/",
+        table_view.create_table,
+        name="Create a new table",
+    ),
     # MENU
     path(
         "menu/",
         menu_view.get_menu,
         name="Menu Items",
+    ),
+    path(
+        "menu/create/",
+        menu_view.create_menu_item,
+        name="Create menu items",
     ),
     path(
         "menu/type/<str:menu_item_type>/",

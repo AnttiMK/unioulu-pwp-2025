@@ -1,5 +1,13 @@
-from django.http import HttpResponseNotAllowed, JsonResponse
 from ..models import MenuItem
+from django.http import (
+    JsonResponse,
+    HttpResponseNotFound,
+    HttpResponseBadRequest,
+    HttpResponseNotAllowed,
+    HttpResponseServerError,
+    HttpResponse
+)
+import json
 
 
 def get_menu(request):
@@ -46,8 +54,30 @@ def get_items_by_type(request, menu_item_type: str):
     return JsonResponse(items)
 
 
-def create_menu_item(request, id):
-    pass
+def create_menu_item(request):
+    if request.method != "POST":
+        return HttpResponseBadRequest("Only POST is allowed.")
+
+    try:
+        data = json.loads(request.body)
+        name = data.get("name")
+        description = data.get("description")
+        type = data.get("type")
+        price = data.get("price")
+
+        if not (name and description and type and price):
+            return HttpResponseBadRequest("Missing required fields")
+
+        if MenuItem.objects.filter(name=name).exists():
+            return HttpResponseBadRequest("Menu item with this name already exists.")
+
+        new_item = MenuItem.objects.create(name=name, description=description, type=type, price=price)
+        return JsonResponse(new_item.serialize(), status=201)
+
+    except json.JSONDecodeError:
+        return HttpResponseBadRequest("Invalid JSON format.")
+    except Exception as e:
+        return HttpResponseServerError(f"Error creating user: {str(e)}")
 
 
 def update_menu_item(request, id):

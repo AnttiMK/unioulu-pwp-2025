@@ -159,7 +159,7 @@ class Reservation(models.Model, Serializable):
             Reservation.objects.filter(table=self.table)
             .filter(
                 date_and_time__lt=end_time,
-                date_and_time__gte=self.date_and_time,
+                date_and_time__gte=(self.date_and_time - models.F("duration")),
             )
             .exclude(id=self.id)
         )
