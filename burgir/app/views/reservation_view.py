@@ -54,46 +54,32 @@ def get_by_time_status(request, time_status: str):
         return HttpResponseBadRequest(f"Time must be one of: {valid_time_status}")
 
     reservations = {"reservation_count": 0, "reservations": []}
+    all_reservations = Reservation.objects.all()
 
     current_time = timezone.now()
-    print(current_time)
-
-    all_future = Reservation.objects.filter(date_and_time__gt=current_time).all()
-    all_past = Reservation.objects.filter(date_and_time__lt=current_time).all()
-
-    smallest_fut_delta = timedelta(days=99999)
-    smallest_past_delta = timedelta(days=99999)
-
-    closest_future = 0
-    closest_past = 0
-
-    # find the closest future and past reservations
-    for fut in all_future:
-        fut_delta = fut.date_and_time - current_time
-        if fut_delta < smallest_fut_delta:
-            closest_future = fut.date_and_time
-
-    for past in all_past:
-        past_delta = current_time - past.date_and_time
-        if past_delta < smallest_past_delta:
-            closest_past = past.date_and_time - past.duration
 
     if time_status == "upcoming":
-        query = Reservation.objects.filter(date_and_time__gte=closest_future).all()
+        for reservation in Reservation.objects.filter(
+            date_and_time__gt=current_time
+        ).all():
+            reservations["reservation_count"] += 1
+            reservations["reservations"].append(reservation.serialize())
 
     elif time_status == "current":
-        query = (
-            Reservation.objects.filter(date_and_time__gt=closest_past)
-            .filter(date_and_time__lt=closest_future)
-            .all()
-        )
+        for reservation in all_reservations:
+            if reservation.date_and_time > current_time:
+                continue
+            reservation_end = reservation.date_and_time + reservation.duration
+            if reservation_end > current_time:
+                reservations["reservation_count"] += 1
+                reservations["reservations"].append(reservation.serialize())
 
     elif time_status == "past":
-        query = Reservation.objects.filter(date_and_time__lte=closest_past).all()
-
-    for reservation in query:
-        reservations["reservation_count"] += 1
-        reservations["reservations"].append(reservation.serialize())
+        for reservation in all_reservations:
+            reservation_end = reservation.date_and_time + reservation.duration
+            if reservation_end < current_time:
+                reservations["reservation_count"] += 1
+                reservations["reservations"].append(reservation.serialize())
 
     return JsonResponse(reservations)
 
