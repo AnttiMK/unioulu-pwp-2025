@@ -134,8 +134,8 @@ class Reservation(models.Model, Serializable):
             "reserver": self.user.name,
             "table": self.table.id,
             "number of people": self.number_of_people,
-            "date_and_time": self.date_and_time,
-            "duration": self.duration,
+            "date_and_time": self.date_and_time.strftime("%Y-%m-%d %H:%M:%S"),
+            "duration": str(self.duration),
         }
 
     def clean(self):
@@ -159,7 +159,7 @@ class Reservation(models.Model, Serializable):
             Reservation.objects.filter(table=self.table)
             .filter(
                 date_and_time__lt=end_time,
-                date_and_time__gt=self.date_and_time - models.F("duration"),
+                date_and_time__gte=self.date_and_time,
             )
             .exclude(id=self.id)
         )

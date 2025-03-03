@@ -1,10 +1,15 @@
 from django.core.exceptions import ObjectDoesNotExist
+from django.test import TransactionTestCase
+from django.views.decorators.csrf import csrf_exempt
+import json
 from django.http import (
     JsonResponse,
     HttpResponseNotFound,
     HttpResponseBadRequest,
+    HttpResponseServerError,
+    HttpResponse
 )
-from ..models import Order, User
+from ..models import Order, User, OrderItem, MenuItem
 
 
 def get_all(_):
@@ -95,14 +100,95 @@ def get_by_user(_, user_name: str):
 
     return JsonResponse(orders)
 
+@csrf_exempt
+def create_order(request):
+    if request.method != "POST":
+        return HttpResponseBadRequest("Only POST is allowed.")
 
-def create_order(request, id):
-    pass
+    try:
+        data = json.loads(request.body)
+        user_name = data.get("user")
+        order_items = data.get("order_items")
+        status = data.get("status", "pending")
 
+        if not user_name or not order_items:
+            return HttpResponseBadRequest("Missing required fields: user and order_items.")
 
+        try:
+            user = User.objects.get(name=user_name)
+        except User.DoesNotExist:
+            return HttpResponseNotFound("User not found.")
+
+        new_order = Order.objects.create(user=user, status=status,)
+
+        for item in order_items:
+            item_id = item.get("item_id")
+            amount = item.get("amount")
+
+            try:
+                menu_item = MenuItem.objects.get(id=item_id)
+            except MenuItem.DoesNotExist:
+                return HttpResponseBadRequest(f"Menu item with id {item_id} not found.")
+
+            OrderItem.objects.create(order=new_order, item=menu_item, amount=amount,)
+
+        return JsonResponse(new_order.serialize(), status=201)
+
+    except json.JSONDecodeError:
+        return HttpResponseBadRequest("Invalid JSON format.")
+    except Exception as e:
+        return HttpResponseServerError(f"Error creating order: {str(e)}")
+@csrf_exempt    
 def update_order(request, id):
-    pass
+    if request.method not in ["PUT"]:
+        return HttpResponseBadRequest("Only PUT is allowed.")
+    try:
+        try:
+            order = Order.objects.get(id=id)
+        except Order.DoesNotExist:
+            return HttpResponseNotFound("Order not found.")
 
+        data = json.loads(request.body)
+        status = data.get("status")
+        order_items = data.get("order_items")
 
+        if status:
+            order.status = status
+
+        if order_items:
+            for item in order_items:
+                item_id = item.get("item_id")
+                amount = item.get("amount")
+                try:
+                    menu_item = MenuItem.objects.get(id=item_id)
+                except MenuItem.DoesNotExist:
+                    return HttpResponseBadRequest(f"Menu item with id {item_id} not found.")
+                try:
+                    order_item = OrderItem.objects.get(order=order, item=menu_item)
+                    order_item.amount = amount
+                    order_item.save()
+                except OrderItem.DoesNotExist:
+                    OrderItem.objects.create(order=order, item=menu_item, amount=amount,)
+        order.save()
+        return JsonResponse(order.serialize(), status=200)
+
+    except json.JSONDecodeError:
+        return HttpResponseBadRequest("Invalid JSON format.")
+    except Exception as e:
+        return HttpResponseServerError(f"Error updating order: {str(e)}")
+@csrf_exempt   
 def delete_order(request, id):
-    pass
+    if request.method != "DELETE":
+        return HttpResponseBadRequest("Only DELETE is allowed.")
+
+    try:
+        try:
+            order = Order.objects.get(id=id)
+        except Order.DoesNotExist:
+            return HttpResponseNotFound("Order not found.")
+        order.order_items.all().delete()
+        order.delete()
+        return JsonResponse({"message": "Order deleted successfully."}, status=204)
+
+    except Exception as e:
+        return HttpResponseServerError(f"Error deleting order: {str(e)}")

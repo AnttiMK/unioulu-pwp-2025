@@ -24,6 +24,18 @@ urlpatterns = [
         user_view.get_by_identifier,
         name="User by id or name",
     ),
+    path(
+        "users/create/", 
+        user_view.create_user, 
+        name="Create user"
+        ),
+
+    path(
+        "users/delete/<int:id>/", 
+        user_view.delete_user, 
+        name="Delete user"
+        ),
+
     # TABLE
     path(
         "tables/",
@@ -48,6 +60,21 @@ urlpatterns = [
         name="All reservations",
     ),
     path(
+        "reservations/create/", 
+         reservation_view.create_reservation, 
+         name="Create reservation"
+    ),
+    path(
+        "reservations/update/<int:id>/", 
+         reservation_view.update_reservation, 
+         name="Update reservation"
+    ),
+    path(
+        "reservations/delete/<int:id>/", 
+         reservation_view.delete_reservation, 
+         name="Delete reservation"
+    ),
+    path(
         "reservations/<str:user_name>/",
         reservation_view.get_by_user,
         name="Reservations by user",
@@ -63,6 +90,20 @@ urlpatterns = [
         order_view.get_all,
         name="All orders",
     ),
+    path(
+        "orders/create/", 
+        order_view.create_order, 
+        name="Create order"
+        ),
+    path(
+        "orders/update/<int:id>/", 
+        order_view.update_order, 
+        name="Update order"
+        ),
+    path(
+        "orders/delete/<int:id>/", 
+        order_view.delete_order, 
+        name="Delete order"),
     path(
         "orders/<str:user_name>/",
         order_view.get_by_user,
