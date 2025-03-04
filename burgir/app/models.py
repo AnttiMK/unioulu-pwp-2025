@@ -133,41 +133,41 @@ class Reservation(models.Model, Serializable):
         return {
             "reserver": self.user.name,
             "table": self.table.id,
-            "number of people": self.number_of_people,
+            "number_of_people": self.number_of_people,
             "date_and_time": self.date_and_time.strftime("%Y-%m-%d %H:%M:%S"),
             "duration": str(self.duration),
         }
 
-    def clean(self):
-        """Ensure table capacity is suitable for the reservation"""
-        if hasattr(self, "table"):
-            if self.number_of_people < self.table.min_people:
-                raise ValidationError(
-                    f"Too few people for this table. Minimum required: {self.table.min_people}."
-                )
-            if self.number_of_people > self.table.max_people:
-                raise ValidationError(
-                    f"Too many people for this table. Maximum allowed: {self.table.max_people}."
-                )
+    # def clean(self):
+    #     """Ensure table capacity is suitable for the reservation"""
+    #     if hasattr(self, "table"):
+    #         if self.number_of_people < self.table.min_people:
+    #             raise ValidationError(
+    #                 f"Too few people for this table. Minimum required: {self.table.min_people}."
+    #             )
+    #         if self.number_of_people > self.table.max_people:
+    #             raise ValidationError(
+    #                 f"Too many people for this table. Maximum allowed: {self.table.max_people}."
+    #             )
 
-            self._ensure_no_overlap()
+    #         self._ensure_no_overlap()
 
-    def _ensure_no_overlap(self):
-        """Ensure that the reservation does not overlap with an existing reservation"""
-        end_time = self.date_and_time + self.duration
-        overlapping = (
-            Reservation.objects.filter(table=self.table)
-            .filter(
-                date_and_time__lt=end_time,
-                date_and_time__gte=(self.date_and_time - models.F("duration")),
-            )
-            .exclude(id=self.id)
-        )
+    # def _ensure_no_overlap(self):
+    #     """Ensure that the reservation does not overlap with an existing reservation"""
+    #     end_time = self.date_and_time + self.duration
+    #     overlapping = (
+    #         Reservation.objects.filter(table=self.table)
+    #         .filter(
+    #             date_and_time__lt=end_time,
+    #             date_and_time__gte=(self.date_and_time - models.F("duration")),
+    #         )
+    #         .exclude(id=self.id)
+    #     )
 
-        if overlapping.exists():
-            raise ValidationError("Reservation overlaps with existing reservations")
+    #     if overlapping.exists():
+    #         raise ValidationError("Reservation overlaps with existing reservations")
 
-    def save(self, *args, **kwargs):
-        """Run validation before saving the reservation"""
-        self.clean()  # Call clean() to validate
-        super().save(*args, **kwargs)
+    # def save(self, *args, **kwargs):
+    #     """Run validation before saving the reservation"""
+    #     self.clean()  # Call clean() to validate
+    #     super().save(*args, **kwargs)

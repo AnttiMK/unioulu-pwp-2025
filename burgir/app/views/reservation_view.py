@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
-from time import strftime
 from django.core.exceptions import ObjectDoesNotExist
 from ..models import Reservation, Table, User
+from django.db import models
 from django.views.decorators.csrf import csrf_exempt
 from django.utils import timezone
 import json
@@ -141,7 +141,7 @@ def create_reservation(request):
         data = json.loads(request.body)
         user_name = data.get("reserver")
         table_id = data.get("table")
-        number_of_people = data.get("number of people")
+        number_of_people = data.get("number_of_people")
         date_and_time = data.get("date_and_time")
         duration = data.get("duration")
 
@@ -163,6 +163,29 @@ def create_reservation(request):
         )
         hours, minutes, seconds = map(int, duration.split(":"))
         duration_timedelta = timedelta(hours=hours, minutes=minutes, seconds=seconds)
+
+        if aware_datetime < timezone.now():
+            return HttpResponseBadRequest("Reservation can't be in the past!")
+
+        if number_of_people < table.min_people:
+            return HttpResponseBadRequest(
+                f"Too few people for this table. Minimum required: {table.min_people}."
+            )
+        if number_of_people > table.max_people:
+            return HttpResponseBadRequest(
+                f"Too many people for this table. Maximum allowed: {table.max_people}."
+            )
+
+        end_time = aware_datetime + duration_timedelta
+        overlapping = Reservation.objects.filter(
+            date_and_time__lt=end_time,
+            date_and_time__gte=(aware_datetime - models.F("duration")),
+        )
+
+        if overlapping.exists():
+            return HttpResponseBadRequest(
+                "Reservation overlaps with existing reservations"
+            )
 
         new_reservation = Reservation.objects.create(
             user=user,
@@ -201,14 +224,39 @@ def update_reservation(request, id):
 
         if date_and_time:
             naive_datetime = datetime.strptime(date_and_time, "%Y-%m-%d %H:%M:%S")
-            reservation.date_and_time = timezone.make_aware(
+            aware_datetime = timezone.make_aware(
                 naive_datetime, timezone.get_current_timezone()
             )
+            reservation.date_and_time = aware_datetime
 
         if duration:
             hours, minutes, seconds = map(int, duration.split(":"))
-            reservation.duration = timedelta(
+            duration_timedelta = timedelta(
                 hours=hours, minutes=minutes, seconds=seconds
+            )
+            reservation.duration = duration_timedelta
+
+        if number_of_people < reservation.table.min_people:
+            return HttpResponseBadRequest(
+                f"Too few people for this table. Minimum required: {reservation.table.min_people}."
+            )
+        if number_of_people > reservation.table.max_people:
+            return HttpResponseBadRequest(
+                f"Too many people for this table. Maximum allowed: {reservation.table.max_people}."
+            )
+
+        if aware_datetime < timezone.now():
+            return HttpResponseBadRequest("Reservation can't be in the past!")
+
+        end_time = aware_datetime + duration_timedelta
+        overlapping = Reservation.objects.filter(
+            date_and_time__lt=end_time,
+            date_and_time__gte=(aware_datetime - models.F("duration")),
+        )
+
+        if overlapping.exists():
+            return HttpResponseBadRequest(
+                "Reservation overlaps with existing reservations"
             )
 
         reservation.save()
