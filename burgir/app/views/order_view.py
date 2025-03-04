@@ -51,9 +51,9 @@ def get_by_status(request, status):
     Returns:
         JsonResponse: JSON containing all the orders with the specified status
     """
-    valid_status = ["ready", "preparing", "pending", "registered"]
-    if status.lower() not in valid_status:
-        return HttpResponseBadRequest(f"Valid status are: {valid_status}")
+    valid_statuses = ["ready", "preparing", "pending", "registered"]
+    if status.lower() not in valid_statuses:
+        return HttpResponseBadRequest(f"Valid status are: {valid_statuses}")
 
     orders = {"order_count": 0, "orders": []}
     for order in Order.objects.filter(status=status.lower()):
@@ -123,6 +123,10 @@ def create_order(request):
             return HttpResponseBadRequest(
                 "Missing required fields: user and order_items."
             )
+
+        valid_statuses = ["ready", "preparing", "pending", "registered"]
+        if status.lower() not in valid_statuses:
+            return HttpResponseBadRequest(f"Valid status are: {valid_statuses}")
 
         try:
             user = User.objects.get(name=user_name)
