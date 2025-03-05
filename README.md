@@ -44,7 +44,14 @@ cd burgir
 pylint .
 ```
 
-## Populate the database through the Django Admin Panel
+## Pre-populate the database with a script
+After creating the database and the tables through the **migrate** command, run
+```bash
+python prepopulate.py
+```
+to create dummy data for all tables.
+
+## Populate the database manually through the Django Admin Panel
 Run this command to create credentials that can be used for the admin panel:
 ```bash
 python manage.py createsuperuser
