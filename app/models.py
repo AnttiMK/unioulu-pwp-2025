@@ -13,7 +13,7 @@ class Serializable:
         Converts a model instance to a python dictionary to use for JSON
 
         Args:
-            bool: If True, excludes some related objects
+            short: If True, excludes some related objects
 
         Returns:
             dict: Dictionary representation of the model instance

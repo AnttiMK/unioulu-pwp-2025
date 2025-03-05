@@ -5,4 +5,4 @@ def home(request):
     """
     Home page for django admin panel
     """
-    return render(request, "home.html")
+    return render(request, "../templates/home.html")
