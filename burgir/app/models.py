@@ -58,7 +58,7 @@ class Table(models.Model, Serializable):
 
 class MenuItem(models.Model, Serializable):
     name = models.CharField(max_length=64, unique=True)
-    description = models.CharField(max_length=64, unique=True)
+    description = models.CharField(max_length=64)
     type = models.CharField(max_length=20, default="main course")
     price = models.FloatField()
 
