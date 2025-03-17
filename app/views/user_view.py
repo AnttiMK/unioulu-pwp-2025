@@ -1,6 +1,6 @@
-from django.core.exceptions import ObjectDoesNotExist
-from django.views.decorators.csrf import csrf_exempt
 import json
+
+from django.core.exceptions import ObjectDoesNotExist
 from django.http import (
     HttpResponseNotAllowed,
     JsonResponse,
@@ -9,12 +9,12 @@ from django.http import (
     HttpResponseServerError,
     HttpResponse,
 )
+from django.views.decorators.csrf import csrf_exempt
+
 from ..models import User
 
 
 def get_all(request):
-    if request.method != "GET":
-        return HttpResponseNotAllowed(["GET"], "Only GET is allowed!")
     """
     Returns all users in the database.
 
@@ -24,6 +24,9 @@ def get_all(request):
     Returns:
         JsonResponse: JSON containing all users with a short representation and total count
     """
+    if request.method != "GET":
+        return HttpResponseNotAllowed(["GET"], "Only GET is allowed!")
+
     users = {"user_count": 0, "users": []}
     for user in User.objects.all():
         users["users"].append(user.serialize(short=True))
@@ -32,8 +35,6 @@ def get_all(request):
 
 
 def get_by_identifier(request, user_identifier):
-    if request.method != "GET":
-        return HttpResponseNotAllowed(["GET"], "Only GET is allowed!")
     """
     Returns a specific user by their ID or name.
 
@@ -44,6 +45,9 @@ def get_by_identifier(request, user_identifier):
     Returns:
         JsonResponse: JSON containing the requested user's detailed information
     """
+    if request.method != "GET":
+        return HttpResponseNotAllowed(["GET"], "Only GET is allowed!")
+
     try:
         if user_identifier.isdigit():
             user = User.objects.get(id=int(user_identifier))

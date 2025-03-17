@@ -1,10 +1,8 @@
-from datetime import datetime, timedelta
-from django.core.exceptions import ObjectDoesNotExist
-from ..models import Reservation, Table, User
-from django.db import models
-from django.views.decorators.csrf import csrf_exempt
-from django.utils import timezone
 import json
+from datetime import datetime, timedelta
+
+from django.core.exceptions import ObjectDoesNotExist
+from django.db import models
 from django.http import (
     JsonResponse,
     HttpResponseNotFound,
@@ -12,11 +10,13 @@ from django.http import (
     HttpResponseServerError,
     HttpResponseNotAllowed,
 )
+from django.utils import timezone
+from django.views.decorators.csrf import csrf_exempt
+
+from ..models import Reservation, Table, User
 
 
 def get_all(request):
-    if request.method != "GET":
-        return HttpResponseNotAllowed(["GET"], "Only GET is allowed!")
     """
     Returns all reservations in the database.
 
@@ -26,6 +26,9 @@ def get_all(request):
     Returns:
         JsonResponse: JSON containing all reservations with their count
     """
+    if request.method != "GET":
+        return HttpResponseNotAllowed(["GET"], "Only GET is allowed!")
+
     reservations = {"reservation_count": 0, "reservations": []}
 
     for reservation in Reservation.objects.all():
@@ -36,8 +39,6 @@ def get_all(request):
 
 
 def get_by_time_status(request, time_status: str):
-    if request.method != "GET":
-        return HttpResponseNotAllowed(["GET"], "Only GET is allowed!")
     """
     Returns reservations filtered by their time status (upcoming, current, or past).
 
@@ -48,6 +49,8 @@ def get_by_time_status(request, time_status: str):
     Returns:
         JsonResponse: JSON containing all reservations with the specified time status
     """
+    if request.method != "GET":
+        return HttpResponseNotAllowed(["GET"], "Only GET is allowed!")
 
     valid_time_status = ["upcoming", "current", "past"]
     if time_status not in valid_time_status:
@@ -85,8 +88,6 @@ def get_by_time_status(request, time_status: str):
 
 
 def get_by_id(request, reservation_id: int):
-    if request.method != "GET":
-        return HttpResponseNotAllowed(["GET"], "Only GET is allowed!")
     """
     Returns a specific reservation by its ID.
 
@@ -97,6 +98,9 @@ def get_by_id(request, reservation_id: int):
     Returns:
         JsonResponse: JSON containing the requested reservation details
     """
+    if request.method != "GET":
+        return HttpResponseNotAllowed(["GET"], "Only GET is allowed!")
+
     try:
         reservation = Reservation.objects.get(id=int(reservation_id))
     except ObjectDoesNotExist:
@@ -108,8 +112,6 @@ def get_by_id(request, reservation_id: int):
 
 
 def get_by_user(request, user_name: str):
-    if request.method != "GET":
-        return HttpResponseNotAllowed(["GET"], "Only GET is allowed!")
     """
     Returns all reservations for a specific user.
 
@@ -120,6 +122,9 @@ def get_by_user(request, user_name: str):
     Returns:
         JsonResponse: JSON containing all reservations for the specified user
     """
+    if request.method != "GET":
+        return HttpResponseNotAllowed(["GET"], "Only GET is allowed!")
+
     try:
         user = User.objects.get(name=user_name)
     except ObjectDoesNotExist:

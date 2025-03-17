@@ -1,18 +1,16 @@
-from ..models import MenuItem
+import json
+
 from django.http import (
     JsonResponse,
-    HttpResponseNotFound,
     HttpResponseBadRequest,
     HttpResponseNotAllowed,
-    HttpResponseServerError,
-    HttpResponse
+    HttpResponseServerError
 )
-import json
+
+from ..models import MenuItem
 
 
 def get_menu(request):
-    if request.method != "GET":
-        return HttpResponseNotAllowed(["GET"], "Only GET is allowed!")
     """
     Returns the complete menu with items grouped by type.
 
@@ -22,6 +20,9 @@ def get_menu(request):
     Returns:
         JsonResponse: JSON containing all menu items organized by their type
     """
+    if request.method != "GET":
+        return HttpResponseNotAllowed(["GET"], "Only GET is allowed!")
+
     # get whole menu
     menu_items = MenuItem.objects.all()
     # Group items by type
@@ -35,8 +36,6 @@ def get_menu(request):
 
 
 def get_items_by_type(request, menu_item_type: str):
-    if request.method != "GET":
-        return HttpResponseNotAllowed(["GET"], "Only GET is allowed!")
     """
     Returns menu items filtered by their type.
 
@@ -47,6 +46,9 @@ def get_items_by_type(request, menu_item_type: str):
     Returns:
         JsonResponse: JSON containing all menu items of the specified type
     """
+    if request.method != "GET":
+        return HttpResponseNotAllowed(["GET"], "Only GET is allowed!")
+
     items = {"type": menu_item_type, "items": []}
     for item in MenuItem.objects.filter(type=menu_item_type).all():
         items["items"].append(item.serialize())

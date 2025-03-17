@@ -1,6 +1,6 @@
-from django.core.exceptions import ObjectDoesNotExist
-from django.views.decorators.csrf import csrf_exempt
 import json
+
+from django.core.exceptions import ObjectDoesNotExist
 from django.http import (
     HttpResponseNotAllowed,
     JsonResponse,
@@ -8,12 +8,12 @@ from django.http import (
     HttpResponseBadRequest,
     HttpResponseServerError,
 )
+from django.views.decorators.csrf import csrf_exempt
+
 from ..models import Order, User, OrderItem, MenuItem
 
 
 def get_all(request):
-    if request.method != "GET":
-        return HttpResponseNotAllowed(["GET"], "Only GET is allowed!")
     """
     Returns all orders in the database grouped by status.
 
@@ -23,6 +23,9 @@ def get_all(request):
     Returns:
         JsonResponse: JSON containing all orders organized by their status
     """
+    if request.method != "GET":
+        return HttpResponseNotAllowed(["GET"], "Only GET is allowed!")
+
     all_orders = Order.objects.all()
     order_by_status = {}
     orders = {"order_count": 0}
@@ -38,8 +41,6 @@ def get_all(request):
 
 
 def get_by_status(request, status):
-    if request.method != "GET":
-        return HttpResponseNotAllowed(["GET"], "Only GET is allowed!")
     """
     Returns the order with a specific status.
 
@@ -51,6 +52,9 @@ def get_by_status(request, status):
     Returns:
         JsonResponse: JSON containing all the orders with the specified status
     """
+    if request.method != "GET":
+        return HttpResponseNotAllowed(["GET"], "Only GET is allowed!")
+
     valid_statuses = ["ready", "preparing", "pending", "registered"]
     if status.lower() not in valid_statuses:
         return HttpResponseBadRequest(f"Valid status are: {valid_statuses}")
@@ -63,8 +67,6 @@ def get_by_status(request, status):
 
 
 def get_by_id(request, order_id: int):
-    if request.method != "GET":
-        return HttpResponseNotAllowed(["GET"], "Only GET is allowed!")
     """
     Returns the order with a specific id.
 
@@ -75,6 +77,9 @@ def get_by_id(request, order_id: int):
     Returns:
         JsonResponse: JSON representation of the order with specified id.
     """
+    if request.method != "GET":
+        return HttpResponseNotAllowed(["GET"], "Only GET is allowed!")
+
     try:
         order = Order.objects.get(id=int(order_id))
     except ObjectDoesNotExist:
@@ -84,8 +89,6 @@ def get_by_id(request, order_id: int):
 
 
 def get_by_user(request, user_name: str):
-    if request.method != "GET":
-        return HttpResponseNotAllowed(["GET"], "Only GET is allowed!")
     """
     Returns the orders made by the specified user.
 
@@ -96,6 +99,9 @@ def get_by_user(request, user_name: str):
     Returns:
         JsonResponse: JSON containing all the orders made by this user.
     """
+    if request.method != "GET":
+        return HttpResponseNotAllowed(["GET"], "Only GET is allowed!")
+
     try:
         user = User.objects.get(name=user_name)
     except ObjectDoesNotExist:

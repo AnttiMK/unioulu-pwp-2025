@@ -1,18 +1,16 @@
-from ..models import Table
+import json
+
 from django.http import (
     JsonResponse,
-    HttpResponseNotFound,
     HttpResponseBadRequest,
     HttpResponseNotAllowed,
-    HttpResponseServerError,
-    HttpResponse
+    HttpResponseServerError
 )
-import json
+
+from ..models import Table
 
 
 def get_all(request):
-    if request.method != "GET":
-        return HttpResponseNotAllowed(["GET"], "Only GET is allowed!")
     """
     Returns all tables and total number of tables.
 
@@ -23,6 +21,9 @@ def get_all(request):
         JsonResponse: JSON containing all the tables
 
     """
+    if request.method != "GET":
+        return HttpResponseNotAllowed(["GET"], "Only GET is allowed!")
+
     tables = {"table_count": 0, "tables": []}
     for table in Table.objects.all():
         tables["table_count"] += 1
