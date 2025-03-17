@@ -47,8 +47,7 @@ python manage.py runserver
 ## Run pylint
 
 ```bash
-cd burgir
-pylint .
+pylint app
 ```
 
 ## Run tests
