@@ -1,7 +1,9 @@
 import json
-from django.test import TestCase
+
 from django.test import Client
-from ..models import User, OrderItem, MenuItem
+from django.test import TestCase
+
+from ..models import User, MenuItem
 
 
 class OrderTestCase(TestCase):

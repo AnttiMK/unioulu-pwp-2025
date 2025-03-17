@@ -15,7 +15,7 @@ def get_all(request):
     Returns all tables and total number of tables.
 
     Args:
-        _ (HttpRequest): Django HTTP request object
+        request (HttpRequest): Django HTTP request object
 
     Returns:
         JsonResponse: JSON containing all the tables
@@ -32,6 +32,15 @@ def get_all(request):
 
 
 def create_table(request):
+    """
+    Creates a new table.
+
+    Args:
+        request (HttpRequest): Django HTTP request object
+
+    Returns:
+        JsonResponse: JSON containing the newly created table
+    """
     if request.method != "POST":
         return HttpResponseBadRequest("Only POST is allowed.")
 
@@ -52,9 +61,9 @@ def create_table(request):
         return HttpResponseServerError(f"Error creating table: {str(e)}")
 
 
-def update_table(request, id):
-    pass
+# def update_table(request, id):
+#     pass
 
 
-def delete_table(request, id):
-    pass
+# def delete_table(request, id):
+#     pass

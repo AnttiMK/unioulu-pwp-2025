@@ -1,8 +1,5 @@
-from datetime import timedelta
-
 from django.core.validators import MinValueValidator
 from django.db import models
-from django.core.exceptions import ValidationError
 
 
 class Serializable:
@@ -23,6 +20,9 @@ class Serializable:
 
 # Create your models here.
 class User(models.Model, Serializable):
+    """
+
+    """
     name = models.CharField(max_length=64, unique=True)
 
     def serialize(self, short=False):
@@ -45,6 +45,9 @@ class User(models.Model, Serializable):
 
 
 class Table(models.Model, Serializable):
+    """
+
+    """
     min_people = models.IntegerField()
     max_people = models.IntegerField()
 
@@ -57,6 +60,9 @@ class Table(models.Model, Serializable):
 
 
 class MenuItem(models.Model, Serializable):
+    """
+
+    """
     name = models.CharField(max_length=64, unique=True)
     description = models.CharField(max_length=64)
     type = models.CharField(max_length=20, default="main course")
@@ -72,6 +78,9 @@ class MenuItem(models.Model, Serializable):
 
 
 class OrderItem(models.Model, Serializable):
+    """
+
+    """
     item = models.ForeignKey(MenuItem, on_delete=models.CASCADE)
     amount = models.IntegerField()
     order = models.ForeignKey(
@@ -91,10 +100,13 @@ class OrderItem(models.Model, Serializable):
 
 
 class Order(models.Model, Serializable):
+    """
+
+    """
     status = models.CharField(max_length=64)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="orders")
 
-    def total_price(self):
+    def _total_price(self):
         return sum(
             (order_item.item.price * order_item.amount)
             for order_item in self.order_items.all()
@@ -112,12 +124,15 @@ class Order(models.Model, Serializable):
                 items.append(order_item.serialize())
             doc["order_items"] = items
 
-        doc["order_total_price"] = self.total_price()
+        doc["order_total_price"] = self._total_price()
 
         return doc
 
 
 class Reservation(models.Model, Serializable):
+    """
+
+    """
     number_of_people = models.IntegerField(validators=[MinValueValidator(1)])
     date_and_time = models.DateTimeField()
     duration = models.DurationField()

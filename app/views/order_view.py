@@ -94,7 +94,7 @@ def get_by_user(request, user_name: str):
 
     Args:
         request (HttpRequest): Django HTTP request object
-        user (str): The name of the user, who's orders to find.
+        user_name (str): The name of the user, who's orders to find.
 
     Returns:
         JsonResponse: JSON containing all the orders made by this user.
@@ -168,12 +168,15 @@ def create_order(request):
 
 
 @csrf_exempt
-def update_order(request, id):
+def update_order(request, order_id):
+    """
+
+    """
     if request.method != "PUT":
         return HttpResponseNotAllowed(["PUT"], "Only PUT is allowed!")
     try:
         try:
-            order = Order.objects.get(id=id)
+            order = Order.objects.get(id=order_id)
         except Order.DoesNotExist:
             return HttpResponseNotFound("Order not found.")
 
@@ -214,13 +217,13 @@ def update_order(request, id):
 
 
 @csrf_exempt
-def delete_order(request, id):
+def delete_order(request, order_id):
     if request.method != "DELETE":
         return HttpResponseNotAllowed(["DELETE"], "Only DELETE is allowed!")
 
     try:
         try:
-            order = Order.objects.get(id=id)
+            order = Order.objects.get(id=order_id)
         except Order.DoesNotExist:
             return HttpResponseNotFound("Order not found.")
         order.order_items.all().delete()

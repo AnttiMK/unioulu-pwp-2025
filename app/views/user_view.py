@@ -84,16 +84,16 @@ def create_user(request):
 
 
 @csrf_exempt
-def delete_user(request, id):
+def delete_user(request, user_id):
     if request.method != "DELETE":
         return HttpResponseNotAllowed(["PUT"], "Only PUT is allowed!")
 
     try:
-        user = User.objects.get(id=id)
+        user = User.objects.get(id=user_id)
         user.delete()
-        return HttpResponse(f"User {id} deleted successfully.", status=200)
+        return HttpResponse(f"User {user_id} deleted successfully.", status=200)
 
     except User.DoesNotExist:
-        return HttpResponseNotFound(f"User with ID {id} not found.")
+        return HttpResponseNotFound(f"User with ID {user_id} not found.")
     except Exception as e:
         return HttpResponseServerError(f"Error deleting user: {str(e)}")

@@ -1,8 +1,10 @@
 import json
 from datetime import datetime, timedelta
+
+from django.test import Client
 from django.test import TestCase
 from django.utils import timezone
-from django.test import Client
+
 from ..models import User, Table, Reservation
 
 

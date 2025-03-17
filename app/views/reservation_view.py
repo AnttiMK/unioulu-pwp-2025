@@ -63,7 +63,7 @@ def get_by_time_status(request, time_status: str):
 
     if time_status == "upcoming":
         for reservation in Reservation.objects.filter(
-            date_and_time__gt=current_time
+                date_and_time__gt=current_time
         ).all():
             reservations["reservation_count"] += 1
             reservations["reservations"].append(reservation.serialize())
@@ -151,7 +151,7 @@ def create_reservation(request):
         duration = data.get("duration")
 
         if not (
-            user_name and table_id and number_of_people and date_and_time and duration
+                user_name and table_id and number_of_people and date_and_time and duration
         ):
             return HttpResponseBadRequest("Missing required fields.")
         try:
@@ -209,7 +209,7 @@ def create_reservation(request):
 
 
 @csrf_exempt
-def update_reservation(request, id):
+def update_reservation(request, reservation_id):
     if request.method != "PUT":
         return HttpResponseNotAllowed(["PUT"], "Only PUT is allowed!")
 
@@ -220,7 +220,7 @@ def update_reservation(request, id):
         duration = data.get("duration")
 
         try:
-            reservation = Reservation.objects.get(id=id)
+            reservation = Reservation.objects.get(id=reservation_id)
         except Reservation.DoesNotExist:
             return HttpResponseNotFound("Reservation not found.")
 
@@ -276,15 +276,15 @@ def update_reservation(request, id):
 
 
 @csrf_exempt
-def delete_reservation(request, id):
+def delete_reservation(request, reservation_id):
     if request.method != "DELETE":
         return HttpResponseNotAllowed(["DELETE"], "Only DELETE is allowed!")
 
     try:
-        reservation = Reservation.objects.get(id=id)
+        reservation = Reservation.objects.get(id=reservation_id)
         reservation.delete()
         return JsonResponse(
-            {"message": f"Reservation {id} deleted successfully."}, status=204
+            {"message": f"Reservation {reservation_id} deleted successfully."}, status=204
         )
 
     except Reservation.DoesNotExist:
