@@ -63,5 +63,5 @@ pylint app
 coverage run manage.py test
 coverage html
 # The coverage report can be shown also on comman line:
-coverage report -m --omit="manage.py"
+coverage report -m --omit="*/tests/*,*/migrations/*,manage.py,settings.py,urls.py,admin.py,apps.py,__init__.py"
 ```
