@@ -68,7 +68,7 @@ def create_menu_item(request):
         JsonResponse: JSON containing the newly created menu item
     """
     if request.method != "POST":
-        return HttpResponseBadRequest("Only POST is allowed.")
+        return HttpResponseNotAllowed("Only POST is allowed.")
 
     try:
         data = json.loads(request.body)

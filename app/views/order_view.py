@@ -178,13 +178,13 @@ def create_order(request):
 
 
 @csrf_exempt
-def update_order(request, order_id):
+def update_order(request, id):
     """
     Updates an existing order.
 
     Args:
         request (HttpRequest): Django HTTP request object
-        order_id (int): ID of order to update
+        id (int): ID of order to update
 
     Returns:
         JsonResponse: JSON containing the updated order
@@ -193,7 +193,7 @@ def update_order(request, order_id):
         return HttpResponseNotAllowed(["PUT"], "Only PUT is allowed!")
     try:
         try:
-            order = Order.objects.get(id=order_id)
+            order = Order.objects.get(id=id)
         except Order.DoesNotExist:
             return HttpResponseNotFound("Order not found.")
 
@@ -234,13 +234,13 @@ def update_order(request, order_id):
 
 
 @csrf_exempt
-def delete_order(request, order_id):
+def delete_order(request, id):
     """
     Deletes an order by its ID.
 
     Args:
         request (HttpRequest): Django HTTP request object
-        order_id (int): ID of order to delete
+        id (int): ID of order to delete
 
     Returns:
         JsonResponse: JSON containing a success message
@@ -250,7 +250,7 @@ def delete_order(request, order_id):
 
     try:
         try:
-            order = Order.objects.get(id=order_id)
+            order = Order.objects.get(id=id)
         except Order.DoesNotExist:
             return HttpResponseNotFound("Order not found.")
         order.order_items.all().delete()

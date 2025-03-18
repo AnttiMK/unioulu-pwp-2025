@@ -219,13 +219,13 @@ def create_reservation(request):
 
 
 @csrf_exempt
-def update_reservation(request, reservation_id):
+def update_reservation(request, id):
     """
     Updates an existing reservation.
 
     Args:
         request (HttpRequest): Django HTTP request object
-        reservation_id (int): ID of reservation to update
+        id (int): ID of reservation to update
 
     Returns:
         JsonResponse: JSON containing the updated reservation
@@ -240,7 +240,7 @@ def update_reservation(request, reservation_id):
         duration = data.get("duration")
 
         try:
-            reservation = Reservation.objects.get(id=reservation_id)
+            reservation = Reservation.objects.get(id=id)
         except Reservation.DoesNotExist:
             return HttpResponseNotFound("Reservation not found.")
 
@@ -296,13 +296,13 @@ def update_reservation(request, reservation_id):
 
 
 @csrf_exempt
-def delete_reservation(request, reservation_id):
+def delete_reservation(request, id):
     """
     Deletes a reservation by its ID.
 
     Args:
         request (HttpRequest): Django HTTP request object
-        reservation_id (int): ID of reservation to delete
+        id (int): ID of reservation to delete
 
     Returns:
         JsonResponse: JSON containing a success message
@@ -311,10 +311,10 @@ def delete_reservation(request, reservation_id):
         return HttpResponseNotAllowed(["DELETE"], "Only DELETE is allowed!")
 
     try:
-        reservation = Reservation.objects.get(id=reservation_id)
+        reservation = Reservation.objects.get(id=id)
         reservation.delete()
         return JsonResponse(
-            {"message": f"Reservation {reservation_id} deleted successfully."}, status=204
+            {"message": f"Reservation {id} deleted successfully."}, status=204
         )
 
     except Reservation.DoesNotExist:
