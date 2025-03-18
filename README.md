@@ -43,7 +43,8 @@ Log in with the newly created credentials at the /admin endpoint.
 ```bash
 python manage.py runserver
 ```
-
+After this, the app should be available at http://127.0.0.1:8000/.
+The admin panel can be found from http://127.0.0.1:8000/admin.
 -----
 
 ## Development commands
@@ -53,11 +54,11 @@ python manage.py makemigrations
 python manage.py migrate
 ```
 ```bash
-# Project uses pylint for linting
+# The project uses pylint for linting
 pylint app
 ```
 ```bash
-# Tests can be run with coverage to automatically generate a coverage report
+# Tests can be run with coverage to automatically generate a coverage report.
 coverage run manage.py test
 coverage html
 ```
