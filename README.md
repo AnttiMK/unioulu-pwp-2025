@@ -45,6 +45,7 @@ python manage.py runserver
 ```
 After this, the app should be available at http://127.0.0.1:8000/.
 The admin panel can be found from http://127.0.0.1:8000/admin.
+
 -----
 
 ## Development commands
