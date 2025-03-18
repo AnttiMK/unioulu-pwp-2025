@@ -1,3 +1,4 @@
+"""Views for managing reservations."""
 import json
 from datetime import datetime, timedelta
 
@@ -139,6 +140,15 @@ def get_by_user(request, user_name: str):
 
 @csrf_exempt
 def create_reservation(request):
+    """
+    Creates a new reservation.
+
+    Args:
+        request (HttpRequest): Django HTTP request object
+
+    Returns:
+        JsonResponse: JSON containing the newly created reservation
+    """
     if request.method != "POST":
         return HttpResponseNotAllowed(["POST"], "Only POST is allowed!")
 
@@ -210,6 +220,16 @@ def create_reservation(request):
 
 @csrf_exempt
 def update_reservation(request, reservation_id):
+    """
+    Updates an existing reservation.
+
+    Args:
+        request (HttpRequest): Django HTTP request object
+        reservation_id (int): ID of reservation to update
+
+    Returns:
+        JsonResponse: JSON containing the updated reservation
+    """
     if request.method != "PUT":
         return HttpResponseNotAllowed(["PUT"], "Only PUT is allowed!")
 
@@ -277,6 +297,16 @@ def update_reservation(request, reservation_id):
 
 @csrf_exempt
 def delete_reservation(request, reservation_id):
+    """
+    Deletes a reservation by its ID.
+
+    Args:
+        request (HttpRequest): Django HTTP request object
+        reservation_id (int): ID of reservation to delete
+
+    Returns:
+        JsonResponse: JSON containing a success message
+    """
     if request.method != "DELETE":
         return HttpResponseNotAllowed(["DELETE"], "Only DELETE is allowed!")
 

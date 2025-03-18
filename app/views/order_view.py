@@ -1,3 +1,4 @@
+"""Views for managing orders."""
 import json
 
 from django.core.exceptions import ObjectDoesNotExist
@@ -116,6 +117,15 @@ def get_by_user(request, user_name: str):
 
 @csrf_exempt
 def create_order(request):
+    """
+    Creates a new order.
+
+    Args:
+        request (HttpRequest): Django HTTP request object
+
+    Returns:
+        JsonResponse: JSON containing the newly created order
+    """
     if request.method != "POST":
         return HttpResponseNotAllowed(["POST"], "Only POST is allowed!")
 
@@ -170,7 +180,14 @@ def create_order(request):
 @csrf_exempt
 def update_order(request, order_id):
     """
+    Updates an existing order.
 
+    Args:
+        request (HttpRequest): Django HTTP request object
+        order_id (int): ID of order to update
+
+    Returns:
+        JsonResponse: JSON containing the updated order
     """
     if request.method != "PUT":
         return HttpResponseNotAllowed(["PUT"], "Only PUT is allowed!")
@@ -218,6 +235,16 @@ def update_order(request, order_id):
 
 @csrf_exempt
 def delete_order(request, order_id):
+    """
+    Deletes an order by its ID.
+
+    Args:
+        request (HttpRequest): Django HTTP request object
+        order_id (int): ID of order to delete
+
+    Returns:
+        JsonResponse: JSON containing a success message
+    """
     if request.method != "DELETE":
         return HttpResponseNotAllowed(["DELETE"], "Only DELETE is allowed!")
 

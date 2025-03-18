@@ -1,3 +1,4 @@
+"""Tests for the reservation API"""
 import json
 from datetime import datetime, timedelta
 
@@ -10,6 +11,7 @@ from ..models import User, Table, Reservation
 
 # Create your tests here.
 class ReservationTestCase(TestCase):
+    """Tests for the reservation API"""
     def setUp(self):
         self.user = User.objects.create(name="Test User")
         self.table = Table.objects.create(min_people=2, max_people=4)

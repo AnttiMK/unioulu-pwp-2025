@@ -1,3 +1,4 @@
+"""Views for table management."""
 import json
 
 from django.http import (

@@ -1,3 +1,4 @@
+"""Views for managing the menu."""
 import json
 
 from django.http import (
@@ -58,7 +59,13 @@ def get_items_by_type(request, menu_item_type: str):
 
 def create_menu_item(request):
     """
+    Creates a new menu item.
 
+    Args:
+        request (HttpRequest): Django HTTP request object
+
+    Returns:
+        JsonResponse: JSON containing the newly created menu item
     """
     if request.method != "POST":
         return HttpResponseBadRequest("Only POST is allowed.")

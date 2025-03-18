@@ -1,3 +1,4 @@
+"""Views for managing users."""
 import json
 
 from django.core.exceptions import ObjectDoesNotExist
@@ -61,6 +62,15 @@ def get_by_identifier(request, user_identifier):
 
 @csrf_exempt
 def create_user(request):
+    """
+    Creates a new user.
+
+    Args:
+        request (HttpRequest): Django HTTP request object
+
+    Returns:
+        JsonResponse: JSON containing the newly created user
+    """
     if request.method != "POST":
         return HttpResponseNotAllowed(["POST"], "Only POST is allowed!")
 
@@ -85,6 +95,7 @@ def create_user(request):
 
 @csrf_exempt
 def delete_user(request, user_id):
+    """Deletes a user by their ID."""
     if request.method != "DELETE":
         return HttpResponseNotAllowed(["PUT"], "Only PUT is allowed!")
 

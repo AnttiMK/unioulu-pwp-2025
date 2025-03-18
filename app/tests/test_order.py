@@ -1,3 +1,4 @@
+"""Tests for the order API."""
 import json
 
 from django.test import Client
@@ -7,6 +8,7 @@ from ..models import User, MenuItem
 
 
 class OrderTestCase(TestCase):
+    """Tests for the order API"""
     def setUp(self):
         User.objects.create(name="Test User")
         MenuItem.objects.create(

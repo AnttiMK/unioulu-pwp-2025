@@ -1,9 +1,11 @@
+"""Models for the application."""
 from django.core.validators import MinValueValidator
 from django.db import models
 
 
 class Serializable:
     """Provides serialize functionality"""
+    # pylint: disable=too-few-public-methods
 
     def serialize(self, short=False):
         """
@@ -20,9 +22,7 @@ class Serializable:
 
 # Create your models here.
 class User(models.Model, Serializable):
-    """
-
-    """
+    """Represents a user/client that can make orders and reservations."""
     name = models.CharField(max_length=64, unique=True)
 
     def serialize(self, short=False):
@@ -45,9 +45,7 @@ class User(models.Model, Serializable):
 
 
 class Table(models.Model, Serializable):
-    """
-
-    """
+    """Represents a table in the restaurant."""
     min_people = models.IntegerField()
     max_people = models.IntegerField()
 
@@ -60,9 +58,7 @@ class Table(models.Model, Serializable):
 
 
 class MenuItem(models.Model, Serializable):
-    """
-
-    """
+    """Represents a menu item that can be ordered."""
     name = models.CharField(max_length=64, unique=True)
     description = models.CharField(max_length=64)
     type = models.CharField(max_length=20, default="main course")
@@ -78,9 +74,7 @@ class MenuItem(models.Model, Serializable):
 
 
 class OrderItem(models.Model, Serializable):
-    """
-
-    """
+    """Represents an item in an order."""
     item = models.ForeignKey(MenuItem, on_delete=models.CASCADE)
     amount = models.IntegerField()
     order = models.ForeignKey(
@@ -100,9 +94,7 @@ class OrderItem(models.Model, Serializable):
 
 
 class Order(models.Model, Serializable):
-    """
-
-    """
+    """Represents an order made by a user."""
     status = models.CharField(max_length=64)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="orders")
 
@@ -130,9 +122,7 @@ class Order(models.Model, Serializable):
 
 
 class Reservation(models.Model, Serializable):
-    """
-
-    """
+    """Represents a table reservation made by a user."""
     number_of_people = models.IntegerField(validators=[MinValueValidator(1)])
     date_and_time = models.DateTimeField()
     duration = models.DurationField()

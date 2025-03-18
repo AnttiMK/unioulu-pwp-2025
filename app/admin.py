@@ -1,3 +1,4 @@
+"""Django admin configuration."""
 from django.contrib import admin
 
 from .models import Table, User, Reservation, MenuItem, Order, OrderItem
