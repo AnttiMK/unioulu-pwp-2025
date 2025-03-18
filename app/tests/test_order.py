@@ -130,6 +130,11 @@ class OrderViewTests(TestCase):
 
 # Tests for invalid requests
 
+    def test_get_orders_by_incorrect_status(self):
+        # Test that the get_by_status view returns 400 for an incorrect status
+        response = self.client.get(reverse("Get by status", args=['not pending']))
+        self.assertEqual(response.status_code, 400)
+
     def test_get_order_by_invalid_id(self):
         # Test that the get_by_id view returns 404 for an invalid order id
         response = self.client.get(reverse("Order by id", args=[9999]))
@@ -149,6 +154,16 @@ class OrderViewTests(TestCase):
         }
         response = self.client.post(reverse("Create order"), json.dumps(data), content_type="application/json")
         self.assertEqual(response.status_code, 404)
+
+    def test_create_order_with_no_user_or_orderitem(self):
+        # Test that creating an order with no user or order_items returns 400
+        data = {
+            "user": None,
+            "order_items": None,
+            "status": "pending"
+        }
+        response = self.client.post(reverse("Create order"), json.dumps(data), content_type="application/json")
+        self.assertEqual(response.status_code, 400)
 
     def test_create_order_with_nonexistant_menuitem(self):
         # Test that creating an order with an invalid user returns 404

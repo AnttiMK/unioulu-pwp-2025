@@ -60,6 +60,10 @@ class ReservationViewTests(TestCase):
         self.assertIn('reservation_count', response.json())
         self.assertEqual(response.json()['reservation_count'], 1)
 
+    def test_post_by_time_status(self):
+        response = self.client.post(reverse("Get reservation by time status, past current, upcoming", args=["current"]))
+        self.assertEqual(response.status_code, 405)
+
     def test_get_by_time_status_invalid(self):
         response = self.client.get(reverse("Get reservation by time status, past current, upcoming", args=["invalid"]))
         self.assertEqual(response.status_code, 400)
@@ -220,6 +224,24 @@ class ReservationViewTests(TestCase):
         }
         response = self.client.put(reverse("Update reservation", args=[self.reservation.id]), json.dumps(data), content_type="application/json")
         self.assertEqual(response.status_code, 200)
+
+    def test_update_reservation_to_past(self):
+        data = {
+            "number_of_people": 4,
+            "date_and_time": (timezone.now() - timedelta(days=3)).strftime("%Y-%m-%d %H:%M:%S"),
+            "duration": "03:00:00"
+        }
+        response = self.client.put(reverse("Update reservation", args=[self.reservation.id]), json.dumps(data), content_type="application/json")
+        self.assertEqual(response.status_code, 400)
+
+    def test_update_reservation_to_overlap(self):
+        data = {
+            "number_of_people": 4,
+            "date_and_time": (timezone.now() + timedelta(days=1)).strftime("%Y-%m-%d %H:%M:%S"),
+            "duration": "03:00:00"
+        }
+        response = self.client.put(reverse("Update reservation", args=[self.past_reservation.id]), json.dumps(data), content_type="application/json")
+        self.assertEqual(response.status_code, 400)
 
     def test_update_reservation_less_min_people(self):
         data = {

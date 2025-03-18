@@ -25,6 +25,12 @@ class UserViewTests(TestCase):
         self.assertIn('name', response.json())
         self.assertEqual(response.json()['name'], "Alice")
 
+    def test_get_user_by_identifier_by_name(self):
+        response = self.client.get(reverse("User by id or name", args=[self.user1.name]))
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('name', response.json())
+        self.assertEqual(response.json()['name'], "Alice")
+
     def test_get_user_by_identifier_not_found(self):
         response = self.client.get(reverse("User by id or name", args=[999]))
         self.assertEqual(response.status_code, 404)
