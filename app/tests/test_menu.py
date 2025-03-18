@@ -57,6 +57,21 @@ class MenuViewTestCase(TestCase):
         self.assertEqual(response.status_code, 201)
         self.assertEqual(response.json()["name"], "Fries")
 
+    def test_create_menu_item_wrong_datatype(self):
+        # Test that creating a menu item with a wrong datatype fails
+        new_item_data = {
+            "name": "Fries",
+            "description": "Crispy fries",
+            "type": "snack",
+            "price": "dolla fiddy"
+        }
+        response = self.client.post(
+            reverse("Create menu items"),
+            json.dumps(new_item_data),
+            content_type="application/json"
+        )
+        self.assertEqual(response.status_code, 500)
+
     def test_create_menu_item_missing_fields(self):
         """Test that creating a menu item with missing fields fails."""
         new_item_data = {

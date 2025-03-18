@@ -29,12 +29,24 @@ class TableViewTests(TestCase):
         self.assertIn('min_people', response.json())
         self.assertEqual(response.json()['min_people'], 3)
 
+    def test_create_table_wrong_data_type(self):
+        data = {
+            "min_people": "www",
+            "max_people": "ggg"
+        }
+        response = self.client.post(reverse("Create a new table"), json.dumps(data), content_type="application/json")
+        self.assertEqual(response.status_code, 500)
+
     def test_create_table_missing_fields(self):
         data = {
             "min_people": 3
         }
         response = self.client.post(reverse("Create a new table"), json.dumps(data), content_type="application/json")
         self.assertEqual(response.status_code, 400)
+
+    def test_get_create_table(self):
+        response = self.client.get(reverse("Create a new table"))
+        self.assertEqual(response.status_code, 405)
 
     def test_create_table_invalid_json(self):
         response = self.client.post(reverse("Create a new table"), "invalid json", content_type="application/json")

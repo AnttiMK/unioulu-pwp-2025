@@ -42,6 +42,14 @@ class UserViewTests(TestCase):
         self.assertIn('name', response.json())
         self.assertEqual(response.json()['name'], "Charlie")
 
+    def test_create_user_identical_name(self):
+        # Attempt to create a user with the same name as an existing user should fail
+        data = {
+            "name": "Alice"
+        }
+        response = self.client.post(reverse("Create user"), json.dumps(data), content_type="application/json")
+        self.assertEqual(response.status_code, 400)
+
     def test_create_user_missing_fields(self):
         data = {}
         response = self.client.post(reverse("Create user"), json.dumps(data), content_type="application/json")

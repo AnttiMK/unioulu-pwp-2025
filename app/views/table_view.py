@@ -43,7 +43,7 @@ def create_table(request):
         JsonResponse: JSON containing the newly created table
     """
     if request.method != "POST":
-        return HttpResponseBadRequest("Only POST is allowed.")
+        return HttpResponseNotAllowed("Only POST is allowed.")
 
     try:
         data = json.loads(request.body)

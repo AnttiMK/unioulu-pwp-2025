@@ -150,6 +150,26 @@ class OrderViewTests(TestCase):
         response = self.client.post(reverse("Create order"), json.dumps(data), content_type="application/json")
         self.assertEqual(response.status_code, 404)
 
+    def test_create_order_with_nonexistant_menuitem(self):
+        # Test that creating an order with an invalid user returns 404
+        data = {
+            "user": self.user.name,
+            "order_items": [{"item_id": 999999999999, "amount": 1}],
+            "status": "pending"
+        }
+        response = self.client.post(reverse("Create order"), json.dumps(data), content_type="application/json")
+        self.assertEqual(response.status_code, 400)
+
+    def test_create_order_with_wrong_datatype(self):
+        # Test that creating an order with an invalid datatype returns 500
+        data = {
+            "user": self.user.name,
+            "order_items": "like a fifty",
+            "status": "pending"
+        }
+        response = self.client.post(reverse("Create order"), json.dumps(data), content_type="application/json")
+        self.assertEqual(response.status_code, 500)
+
     def test_update_order_with_invalid_id(self):
         # Test that updating an order with an invalid id returns 404
         data = {
@@ -158,6 +178,24 @@ class OrderViewTests(TestCase):
         }
         response = self.client.put(reverse("Update order", args=[9999]), json.dumps(data), content_type="application/json")
         self.assertEqual(response.status_code, 404)
+
+    def test_update_order_with_nonexistant_menuitem(self):
+        # Test that an order can be updated
+        data = {
+            "status": "ready",
+            "order_items": [{"item_id": 999999999999, "amount": 3}]
+        }
+        response = self.client.put(reverse("Update order", args=[self.order.id]), json.dumps(data), content_type="application/json")
+        self.assertEqual(response.status_code, 400)
+
+    def test_update_order_with_wrong_datatype(self):
+        # Test that an order can be updated
+        data = {
+            "status": "ready",
+            "order_items": "four numba fives"
+        }
+        response = self.client.put(reverse("Update order", args=[self.order.id]), json.dumps(data), content_type="application/json")
+        self.assertEqual(response.status_code, 500)
 
     def test_delete_order_with_invalid_id(self):
         # Test that deleting an order with an invalid id returns 404

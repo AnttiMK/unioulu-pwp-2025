@@ -89,8 +89,6 @@ def create_user(request):
 
     except json.JSONDecodeError:
         return HttpResponseBadRequest("Invalid JSON format.")
-    except Exception as e:
-        return HttpResponseServerError(f"Error creating user: {str(e)}")
 
 
 @csrf_exempt
@@ -106,5 +104,3 @@ def delete_user(request, id):
 
     except User.DoesNotExist:
         return HttpResponseNotFound(f"User with ID {id} not found.")
-    except Exception as e:
-        return HttpResponseServerError(f"Error deleting user: {str(e)}")
