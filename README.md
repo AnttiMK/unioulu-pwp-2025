@@ -62,4 +62,6 @@ pylint app
 # Tests can be run with coverage to automatically generate a coverage report.
 coverage run manage.py test
 coverage html
+# The coverage report can be shown also on comman line:
+coverage report -m --omit="manage.py"
 ```
