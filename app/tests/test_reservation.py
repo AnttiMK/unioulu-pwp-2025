@@ -139,14 +139,14 @@ class ReservationTestCase(TestCase):
         reservations = json.loads(response.content)["reservations"]
         self.assertEqual(len(reservations), 1, "Returned more than one reservation!")
 
-        time = datetime.strptime(reservations[0]["date_and_time"], "%Y-%m-%d %H:%M:%S")
+        time = timezone.make_aware(datetime.strptime(reservations[0]["date_and_time"], "%Y-%m-%d %H:%M:%S"))
 
         hours, minutes, seconds = map(int, reservations[0]["duration"].split(":"))
         duration = timedelta(hours=hours, minutes=minutes, seconds=seconds)
 
         # subtract 30 seconds from current time, as the starting time is current time
-        self.assertGreater(time, (datetime.now() - timedelta(seconds=30)))
-        self.assertLess(datetime.now(), time + duration)
+        self.assertGreater(time, (timezone.now() - timedelta(seconds=30)))
+        self.assertLess(timezone.now(), time + duration)
 
     def test_get_by_time_past(self):
         """Test getting past reservations"""
