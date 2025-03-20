@@ -1,4 +1,5 @@
 """Views for managing orders."""
+
 import json
 
 from django.core.exceptions import ObjectDoesNotExist
@@ -14,6 +15,73 @@ from django.views.decorators.csrf import csrf_exempt
 from ..models import Order, User, OrderItem, MenuItem
 
 
+def orders(request):
+    """
+    Handle requests for the orders endpoint.
+
+    This function routes requests to appropriate handlers based on the HTTP method:
+    - GET: Returns all orders (handled by get_all)
+    - POST: Creates a new order (handled by create_order)
+
+    Args:
+        request (HttpRequest): Django HTTP request object
+
+    Returns:
+        JsonResponse: Result from the appropriate handler function
+        HttpResponseNotAllowed: If the request method is not supported
+    """
+    if request.method == "GET":
+        return get_all(request)
+    elif request.method == "POST":
+        return create_order(request)
+    else:
+        return HttpResponseNotAllowed(["GET", "POST"], "Only GET and POST are allowed!")
+
+
+def orders_id(request, order_identifier):
+    """
+    Handle requests for specific orders based on the provided identifier.
+
+    This function routes requests based on the type of identifier and HTTP method:
+    - If identifier is numeric:
+      - GET: Returns order by ID (handled by get_by_id)
+      - PUT: Updates an order (handled by update_order)
+      - DELETE: Deletes an order (handled by delete_order)
+    - If identifier is a valid status string:
+      - Returns orders with that status (handled by get_by_status)
+    - Otherwise:
+      - Treats identifier as a username and returns user's orders (handled by get_by_user)
+
+    Args:
+        request (HttpRequest): Django HTTP request object
+        order_identifier (str): Order ID, status, or username to filter by
+
+    Returns:
+        JsonResponse: Result from the appropriate handler function
+    """
+    if order_identifier.isdigit():
+        order_identifier = int(order_identifier)
+        if request.method == "GET":
+            return get_by_id(request, order_identifier)
+        elif request.method == "PUT":
+            return update_order(request, order_identifier)
+        elif request.method == "DELETE":
+            return delete_order(request, order_identifier)
+        else:
+            return HttpResponseNotAllowed(
+                ["GET", "DELETE", "PUT"], "Only GET, DELETE, PUT are allowed!"
+            )
+    else:
+        if request.method == "GET":
+            valid_statuses = ["ready", "preparing", "pending", "registered"]
+            if order_identifier.lower() in valid_statuses:
+                return get_by_status(request, order_identifier)
+            else:
+                return get_by_user(request, order_identifier)
+        else:
+            return HttpResponseNotAllowed(["GET"], "Only GET is allowed!")
+
+
 def get_all(request):
     """
     Returns all orders in the database grouped by status.
@@ -24,8 +92,6 @@ def get_all(request):
     Returns:
         JsonResponse: JSON containing all orders organized by their status
     """
-    if request.method != "GET":
-        return HttpResponseNotAllowed(["GET"], "Only GET is allowed!")
 
     all_orders = Order.objects.all()
     order_by_status = {}
@@ -53,12 +119,6 @@ def get_by_status(request, status):
     Returns:
         JsonResponse: JSON containing all the orders with the specified status
     """
-    if request.method != "GET":
-        return HttpResponseNotAllowed(["GET"], "Only GET is allowed!")
-
-    valid_statuses = ["ready", "preparing", "pending", "registered"]
-    if status.lower() not in valid_statuses:
-        return HttpResponseBadRequest(f"Valid status are: {valid_statuses}")
 
     orders = {"order_count": 0, "orders": []}
     for order in Order.objects.filter(status=status.lower()):
@@ -78,8 +138,6 @@ def get_by_id(request, order_id: int):
     Returns:
         JsonResponse: JSON representation of the order with specified id.
     """
-    if request.method != "GET":
-        return HttpResponseNotAllowed(["GET"], "Only GET is allowed!")
 
     try:
         order = Order.objects.get(id=int(order_id))
@@ -100,8 +158,6 @@ def get_by_user(request, user_name: str):
     Returns:
         JsonResponse: JSON containing all the orders made by this user.
     """
-    if request.method != "GET":
-        return HttpResponseNotAllowed(["GET"], "Only GET is allowed!")
 
     try:
         user = User.objects.get(name=user_name)
@@ -126,8 +182,6 @@ def create_order(request):
     Returns:
         JsonResponse: JSON containing the newly created order
     """
-    if request.method != "POST":
-        return HttpResponseNotAllowed(["POST"], "Only POST is allowed!")
 
     try:
         data = json.loads(request.body)
@@ -189,8 +243,7 @@ def update_order(request, id):
     Returns:
         JsonResponse: JSON containing the updated order
     """
-    if request.method != "PUT":
-        return HttpResponseNotAllowed(["PUT"], "Only PUT is allowed!")
+
     try:
         try:
             order = Order.objects.get(id=id)
@@ -245,8 +298,6 @@ def delete_order(request, id):
     Returns:
         JsonResponse: JSON containing a success message
     """
-    if request.method != "DELETE":
-        return HttpResponseNotAllowed(["DELETE"], "Only DELETE is allowed!")
 
     try:
         try:

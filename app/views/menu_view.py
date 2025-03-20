@@ -1,14 +1,39 @@
 """Views for managing the menu."""
+
 import json
 
 from django.http import (
     JsonResponse,
     HttpResponseBadRequest,
     HttpResponseNotAllowed,
-    HttpResponseServerError
+    HttpResponseServerError,
 )
 
 from ..models import MenuItem
+
+
+def menu(request):
+    """
+    Handle requests for the menu endpoint.
+
+    This function routes requests to appropriate handlers based on the HTTP method:
+    - GET: Returns all menu (handled by get_menu)
+    - POST: Creates a new order (handled by create_menu_item)
+
+    Args:
+        request (HttpRequest): Django HTTP request object
+
+    Returns:
+        JsonResponse: Result from the appropriate handler function
+        HttpResponseNotAllowed: If the request method is not supported
+    """
+    print(request.method == "GET")
+    if request.method == "GET":
+        return get_menu(request)
+    elif request.method == "POST":
+        return create_menu_item(request)
+    else:
+        return HttpResponseNotAllowed(["GET", "POST"], "Only GET and POST are allowed!")
 
 
 def get_menu(request):
@@ -16,13 +41,11 @@ def get_menu(request):
     Returns the complete menu with items grouped by type.
 
     Args:
-        request (HttpRequest): Django HTTP request object
+        request (HttpRequest): Django HTTP request object (unused)
 
     Returns:
         JsonResponse: JSON containing all menu items organized by their type
     """
-    if request.method != "GET":
-        return HttpResponseNotAllowed(["GET"], "Only GET is allowed!")
 
     # get whole menu
     menu_items = MenuItem.objects.all()
@@ -67,8 +90,6 @@ def create_menu_item(request):
     Returns:
         JsonResponse: JSON containing the newly created menu item
     """
-    if request.method != "POST":
-        return HttpResponseNotAllowed("Only POST is allowed.")
 
     try:
         data = json.loads(request.body)
@@ -92,11 +113,3 @@ def create_menu_item(request):
         return HttpResponseBadRequest("Invalid JSON format.")
     except Exception as e:
         return HttpResponseServerError(f"Error creating user: {str(e)}")
-
-
-# def update_menu_item(request, id):
-#     pass
-
-
-# def delete_menu_item(request, id):
-#    pass

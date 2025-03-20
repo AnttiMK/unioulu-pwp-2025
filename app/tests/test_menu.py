@@ -3,20 +3,15 @@ from django.test import TestCase, Client
 from django.urls import reverse
 from ..models import MenuItem
 
+
 class MenuViewTestCase(TestCase):
     def setUp(self):
         self.client = Client()
         self.menu_item1 = MenuItem.objects.create(
-            name="Burger",
-            description="A tasty burger",
-            type="main course",
-            price=9.99
+            name="Burger", description="A tasty burger", type="main course", price=9.99
         )
         self.menu_item2 = MenuItem.objects.create(
-            name="Coke",
-            description="Refreshing beverage",
-            type="drink",
-            price=1.99
+            name="Coke", description="Refreshing beverage", type="drink", price=1.99
         )
 
     def test_get_menu(self):
@@ -33,10 +28,6 @@ class MenuViewTestCase(TestCase):
         self.assertEqual(response.json()["type"], "drink")
         self.assertEqual(len(response.json()["items"]), 1)
 
-    def test_get_menu_invalid_method(self):
-        response = self.client.post(reverse("Menu Items"))
-        self.assertEqual(response.status_code, 405)
-
     def test_get_items_by_type_invalid_method(self):
         response = self.client.post(reverse("Get items by type", args=["drink"]))
         self.assertEqual(response.status_code, 405)
@@ -47,12 +38,12 @@ class MenuViewTestCase(TestCase):
             "name": "Fries",
             "description": "Crispy fries",
             "type": "snack",
-            "price": 2.99
+            "price": 2.99,
         }
         response = self.client.post(
-            reverse("Create menu items"),
+            reverse("Menu Items"),
             json.dumps(new_item_data),
-            content_type="application/json"
+            content_type="application/json",
         )
         self.assertEqual(response.status_code, 201)
         self.assertEqual(response.json()["name"], "Fries")
@@ -63,12 +54,12 @@ class MenuViewTestCase(TestCase):
             "name": "Fries",
             "description": "Crispy fries",
             "type": "snack",
-            "price": "dolla fiddy"
+            "price": "dolla fiddy",
         }
         response = self.client.post(
-            reverse("Create menu items"),
+            reverse("Menu Items"),
             json.dumps(new_item_data),
-            content_type="application/json"
+            content_type="application/json",
         )
         self.assertEqual(response.status_code, 500)
 
@@ -77,20 +68,15 @@ class MenuViewTestCase(TestCase):
         new_item_data = {
             "name": "Fries",
             "description": "Crispy fries",
-            "type": "snack"
+            "type": "snack",
         }
         response = self.client.post(
-            reverse("Create menu items"),
+            reverse("Menu Items"),
             json.dumps(new_item_data),
-            content_type="application/json"
+            content_type="application/json",
         )
         self.assertEqual(response.status_code, 400)
         self.assertIn("Missing required fields", response.content.decode())
-
-    def test_get_create_menu_item(self):
-        # Test that the create_menu_item view does not allow GET requests
-        response = self.client.get(reverse("Create menu items"))
-        self.assertEqual(response.status_code, 405)
 
     def test_create_menu_item_duplicate_name(self):
         """Test that creating a menu item with a duplicate name fails."""
@@ -98,23 +84,25 @@ class MenuViewTestCase(TestCase):
             "name": "Burger",
             "description": "Another tasty burger",
             "type": "main course",
-            "price": 10.99
+            "price": 10.99,
         }
         response = self.client.post(
-            reverse("Create menu items"),
+            reverse("Menu Items"),
             json.dumps(new_item_data),
-            content_type="application/json"
+            content_type="application/json",
         )
         self.assertEqual(response.status_code, 400)
-        self.assertIn("Menu item with this name already exists", response.content.decode())
+        self.assertIn(
+            "Menu item with this name already exists", response.content.decode()
+        )
 
     def test_create_menu_item_invalid_json(self):
         """Test that creating a menu item with invalid JSON fails."""
         invalid_json_data = "Invalid JSON"
         response = self.client.post(
-            reverse("Create menu items"),
+            reverse("Menu Items"),
             invalid_json_data,
-            content_type="application/json"
+            content_type="application/json",
         )
         self.assertEqual(response.status_code, 400)
         self.assertIn("Invalid JSON format", response.content.decode())

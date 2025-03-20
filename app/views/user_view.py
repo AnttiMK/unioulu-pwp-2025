@@ -1,4 +1,5 @@
 """Views for managing users."""
+
 import json
 
 from django.core.exceptions import ObjectDoesNotExist
@@ -15,6 +16,55 @@ from django.views.decorators.csrf import csrf_exempt
 from ..models import User
 
 
+def user(request):
+    """
+    Handle requests for the users endpoint.
+
+    This function routes requests to appropriate handlers based on the HTTP method:
+    - GET: Returns all users (handled by get_all)
+    - POST: Creates a new user (handled by create_user)
+
+    Args:
+        request (HttpRequest): Django HTTP request object
+
+    Returns:
+        JsonResponse: Result from the appropriate handler function
+        HttpResponseNotAllowed: If the request method is not supported
+    """
+    if request.method == "GET":
+        return get_all(request)
+    elif request.method == "POST":
+        return create_user(request)
+    else:
+        return HttpResponseNotAllowed(["GET", "POST"], "Only GET and POST are allowed!")
+
+
+def user_id(request, id):
+    """
+    Handle requests for a specific user based on the provided identifier.
+
+    This function routes requests based on the HTTP method:
+    - GET: Returns user by ID or name (handled by get_by_identifier)
+    - DELETE: Deletes a user (handled by delete_user)
+
+    Args:
+        request (HttpRequest): Django HTTP request object
+        id (str): User ID or name to identify the user
+
+    Returns:
+        JsonResponse: Result from the appropriate handler function
+        HttpResponseNotAllowed: If the request method is not supported
+    """
+    if request.method == "GET":
+        return get_by_identifier(request, id)
+    elif request.method == "DELETE":
+        return delete_user(request, id)
+    else:
+        return HttpResponseNotAllowed(
+            ["GET", "DELETE"], "Only GET and DELETE are allowed!"
+        )
+
+
 def get_all(request):
     """
     Returns all users in the database.
@@ -25,8 +75,6 @@ def get_all(request):
     Returns:
         JsonResponse: JSON containing all users with a short representation and total count
     """
-    if request.method != "GET":
-        return HttpResponseNotAllowed(["GET"], "Only GET is allowed!")
 
     users = {"user_count": 0, "users": []}
     for user in User.objects.all():
@@ -35,7 +83,7 @@ def get_all(request):
     return JsonResponse(users)
 
 
-def get_by_identifier(request, user_identifier):
+def get_by_identifier(request, id):
     """
     Returns a specific user by their ID or name.
 
@@ -46,14 +94,10 @@ def get_by_identifier(request, user_identifier):
     Returns:
         JsonResponse: JSON containing the requested user's detailed information
     """
-    if request.method != "GET":
-        return HttpResponseNotAllowed(["GET"], "Only GET is allowed!")
 
     try:
-        if user_identifier.isdigit():
-            user = User.objects.get(id=int(user_identifier))
-        else:
-            user = User.objects.get(name=user_identifier)
+        user = User.objects.get(id=id)
+
     except ObjectDoesNotExist:
         return HttpResponseNotFound("User does not exist!")
 
@@ -71,8 +115,6 @@ def create_user(request):
     Returns:
         JsonResponse: JSON containing the newly created user
     """
-    if request.method != "POST":
-        return HttpResponseNotAllowed(["POST"], "Only POST is allowed!")
 
     try:
         data = json.loads(request.body)
@@ -94,8 +136,6 @@ def create_user(request):
 @csrf_exempt
 def delete_user(request, id):
     """Deletes a user by their ID."""
-    if request.method != "DELETE":
-        return HttpResponseNotAllowed(["PUT"], "Only DELETE is allowed!")
 
     try:
         user = User.objects.get(id=id)

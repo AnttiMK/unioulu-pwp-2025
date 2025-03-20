@@ -1,4 +1,5 @@
 """Views for managing reservations."""
+
 import json
 from datetime import datetime, timedelta
 
@@ -17,6 +18,76 @@ from django.views.decorators.csrf import csrf_exempt
 from ..models import Reservation, Table, User
 
 
+def reservations(request):
+    """
+    Handle requests for the reservations endpoint.
+
+    This function routes requests to appropriate handlers based on the HTTP method:
+    - GET: Returns all reservations (handled by get_all)
+    - POST: Creates a new reservation (handled by create_reservation)
+
+    Args:
+        request (HttpRequest): Django HTTP request object
+
+    Returns:
+        JsonResponse: Result from the appropriate handler function
+        HttpResponseNotAllowed: If the request method is not supported
+    """
+    if request.method == "GET":
+        return get_all(request)
+    elif request.method == "POST":
+        return create_reservation(request)
+    else:
+        return HttpResponseNotAllowed(["GET", "POST"], "Only GET and POST are allowed!")
+
+
+def reservation_id(request, reservation_identifier):
+    """
+    Handle requests for specific reservations based on the provided identifier.
+
+    This function routes requests based on the type of identifier and HTTP method:
+    - If identifier is numeric:
+      - GET: Returns reservation by ID (handled by get_by_id)
+      - DELETE: Deletes a reservation (handled by delete_reservation)
+      - PUT: Updates a reservation (handled by update_reservation)
+    - If identifier is a valid time status string ("upcoming", "current", "past"):
+      - Returns reservations with that time status (handled by get_by_time_status)
+    - Otherwise:
+      - Treats identifier as a username and returns user's reservations (handled by get_by_user)
+
+    Args:
+        request (HttpRequest): Django HTTP request object
+        reservation_identifier (str): Reservation ID, time status, or username to filter by
+
+    Returns:
+        JsonResponse: Result from the appropriate handler function
+    """
+    if reservation_identifier.isdigit():
+        reservation_identifier = int(reservation_identifier)
+        if request.method == "GET":
+            return get_by_id(request, reservation_identifier)
+
+        elif request.method == "DELETE":
+            return delete_reservation(request, reservation_identifier)
+
+        elif request.method == "PUT":
+            return update_reservation(request, reservation_identifier)
+
+        else:
+            return HttpResponseNotAllowed(
+                ["GET", "DELETE", "PUT"], "Only GET, DELETE, PUT are allowed!"
+            )
+    else:
+        if request.method == "GET":
+            valid_time_status = ["upcoming", "current", "past"]
+            if reservation_identifier in valid_time_status:
+                return get_by_time_status(request, reservation_identifier)
+            else:
+                return get_by_user(request, reservation_identifier)
+        else:
+            return HttpResponseNotAllowed(["GET"], "Only GET is allowed!")
+
+
 def get_all(request):
     """
     Returns all reservations in the database.
@@ -27,8 +98,6 @@ def get_all(request):
     Returns:
         JsonResponse: JSON containing all reservations with their count
     """
-    if request.method != "GET":
-        return HttpResponseNotAllowed(["GET"], "Only GET is allowed!")
 
     reservations = {"reservation_count": 0, "reservations": []}
 
@@ -50,8 +119,6 @@ def get_by_time_status(request, time_status: str):
     Returns:
         JsonResponse: JSON containing all reservations with the specified time status
     """
-    if request.method != "GET":
-        return HttpResponseNotAllowed(["GET"], "Only GET is allowed!")
 
     valid_time_status = ["upcoming", "current", "past"]
     if time_status not in valid_time_status:
@@ -64,7 +131,7 @@ def get_by_time_status(request, time_status: str):
 
     if time_status == "upcoming":
         for reservation in Reservation.objects.filter(
-                date_and_time__gt=current_time
+            date_and_time__gt=current_time
         ).all():
             reservations["reservation_count"] += 1
             reservations["reservations"].append(reservation.serialize())
@@ -99,8 +166,6 @@ def get_by_id(request, reservation_id: int):
     Returns:
         JsonResponse: JSON containing the requested reservation details
     """
-    if request.method != "GET":
-        return HttpResponseNotAllowed(["GET"], "Only GET is allowed!")
 
     try:
         reservation = Reservation.objects.get(id=int(reservation_id))
@@ -123,8 +188,6 @@ def get_by_user(request, user_name: str):
     Returns:
         JsonResponse: JSON containing all reservations for the specified user
     """
-    if request.method != "GET":
-        return HttpResponseNotAllowed(["GET"], "Only GET is allowed!")
 
     try:
         user = User.objects.get(name=user_name)
@@ -149,8 +212,6 @@ def create_reservation(request):
     Returns:
         JsonResponse: JSON containing the newly created reservation
     """
-    if request.method != "POST":
-        return HttpResponseNotAllowed(["POST"], "Only POST is allowed!")
 
     try:
         data = json.loads(request.body)
@@ -161,7 +222,7 @@ def create_reservation(request):
         duration = data.get("duration")
 
         if not (
-                user_name and table_id and number_of_people and date_and_time and duration
+            user_name and table_id and number_of_people and date_and_time and duration
         ):
             return HttpResponseBadRequest("Missing required fields.")
         try:
@@ -230,8 +291,6 @@ def update_reservation(request, id):
     Returns:
         JsonResponse: JSON containing the updated reservation
     """
-    if request.method != "PUT":
-        return HttpResponseNotAllowed(["PUT"], "Only PUT is allowed!")
 
     try:
         data = json.loads(request.body)
@@ -307,8 +366,6 @@ def delete_reservation(request, id):
     Returns:
         JsonResponse: JSON containing a success message
     """
-    if request.method != "DELETE":
-        return HttpResponseNotAllowed(["DELETE"], "Only DELETE is allowed!")
 
     try:
         reservation = Reservation.objects.get(id=id)
