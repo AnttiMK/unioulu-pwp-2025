@@ -30,11 +30,11 @@
 
 
 ## Meeting 3.
-* **DATE:**
+* **DATE:18.3.**
 * **ASSISTANTS:**
 
 ### Minutes
-*Summary of what was discussed during the meeting*
+Change URLs to uniforma interface.
 
 ### Action points
 *List here the actions points discussed with assistants*
