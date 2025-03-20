@@ -39,7 +39,7 @@ def user(request):
         return HttpResponseNotAllowed(["GET", "POST"], "Only GET and POST are allowed!")
 
 
-def user_id(request, id):
+def user_id(request, user_identifier):
     """
     Handle requests for a specific user based on the provided identifier.
 
@@ -49,16 +49,16 @@ def user_id(request, id):
 
     Args:
         request (HttpRequest): Django HTTP request object
-        id (str): User ID or name to identify the user
+        user_identifier (str): User ID or name to identify the user
 
     Returns:
         JsonResponse: Result from the appropriate handler function
         HttpResponseNotAllowed: If the request method is not supported
     """
+    if user_identifier.isdigit() and request.method == "DELETE":
+        return delete_user(request, int(user_identifier))
     if request.method == "GET":
-        return get_by_identifier(request, id)
-    elif request.method == "DELETE":
-        return delete_user(request, id)
+        return get_by_identifier(request, user_identifier)
     else:
         return HttpResponseNotAllowed(
             ["GET", "DELETE"], "Only GET and DELETE are allowed!"
@@ -89,14 +89,17 @@ def get_by_identifier(request, id):
 
     Args:
         request (HttpRequest): Django HTTP request object
-        user_identifier (str): User ID (numeric) or name to search for
+        id (str): User ID (numeric) or name to search for
 
     Returns:
         JsonResponse: JSON containing the requested user's detailed information
     """
 
     try:
-        user = User.objects.get(id=id)
+        if id.isdigit():
+            user = User.objects.get(id=int(id))
+        else:
+            user = User.objects.get(name=id)
 
     except ObjectDoesNotExist:
         return HttpResponseNotFound("User does not exist!")

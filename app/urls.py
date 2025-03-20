@@ -17,7 +17,7 @@ urlpatterns = [
         name="Users",
     ),
     path(
-        "users/<int:id>/",
+        "users/<user_identifier>/",
         user_view.user_id,
         name="UsersID",
     ),
