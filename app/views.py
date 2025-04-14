@@ -9,8 +9,8 @@ from rest_framework import viewsets, filters
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from app.models import User
-from app.serializers import UserSerializer, ReservationSerializer
+from app.models import User, Table
+from app.serializers import UserSerializer, ReservationSerializer, TableSerializer
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -35,6 +35,16 @@ class UserViewSet(viewsets.ModelViewSet):
     @method_decorator(cache_page(60 * 60)) # Cache for 1 hour
     def list(self, request, *args, **kwargs):
         return super().list(request, *args, **kwargs)
+
+    def perform_create(self, serializer):
+        serializer.save()
+
+class TableViewSet(viewsets.ModelViewSet):
+    """
+    A ViewSet for managing tables.
+    """
+    queryset = Table.objects.all()
+    serializer_class = TableSerializer
 
     def perform_create(self, serializer):
         serializer.save()

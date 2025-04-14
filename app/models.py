@@ -30,17 +30,14 @@ class User(models.Model):
         ordering = ["name"]
 
 
-class Table(models.Model, Serializable):
+class Table(models.Model):
     """Represents a table in the restaurant."""
     min_people = models.IntegerField()
     max_people = models.IntegerField()
 
-    def serialize(self, short=False):
-        return {
-            "number": self.id,
-            "min_people": self.min_people,
-            "max_people": self.max_people,
-        }
+    class Meta:
+        """Meta options for the Table model."""
+        ordering = ["id"]
 
 
 class MenuItem(models.Model, Serializable):
