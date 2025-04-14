@@ -8,7 +8,6 @@ from django.http import (
     JsonResponse,
     HttpResponseNotFound,
     HttpResponseBadRequest,
-    HttpResponseServerError,
     HttpResponse,
 )
 from django.views.decorators.csrf import csrf_exempt

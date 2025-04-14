@@ -21,27 +21,13 @@ class Serializable:
 
 
 # Create your models here.
-class User(models.Model, Serializable):
+class User(models.Model):
     """Represents a user/client that can make orders and reservations."""
     name = models.CharField(max_length=64, unique=True)
 
-    def serialize(self, short=False):
-        doc = {
-            "id": self.id,
-            "name": self.name,
-        }
-        if not short:
-            orders = []
-            for order in Order.objects.filter(user=self).all():
-                orders.append(order.serialize())
-            reservations = []
-            for reservation in Reservation.objects.filter(user=self).all():
-                reservations.append(reservation.serialize())
-
-            doc["orders"] = orders
-            doc["reservations"] = reservations
-
-        return doc
+    class Meta:
+        """Meta options for the User model."""
+        ordering = ["name"]
 
 
 class Table(models.Model, Serializable):
