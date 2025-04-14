@@ -70,6 +70,11 @@ pylint app
 ```
 
 ```bash
+# OpenAPI schema can be generated with drf-spectacular
+python manage.py spectacular --color --file schema.yml
+```
+
+```bash
 # Tests can be run with coverage to automatically generate a coverage report.
 coverage run manage.py test
 coverage html
