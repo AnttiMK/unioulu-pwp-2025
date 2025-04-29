@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/5.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
-
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -24,8 +24,26 @@ SECRET_KEY = 'django-insecure-0v#u(k)55$g%0@0%vws!0^y7@q^(2=q799e%vs^gh37ij-^z%y
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+# Security settings for OpenShift
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+USE_X_FORWARDED_HOST = True
+USE_X_FORWARDED_PORT = True
 
-ALLOWED_HOSTS = []
+# Required for OpenShift health checks
+ALLOWED_HOSTS = [
+    'burgirs.2.rahtiapp.fi', 
+    'localhost',
+    '127.0.0.1',
+    'pwp-test',  # Service name
+    'pwp-test.distributed-ransomware-detection-file-recovery.svc'  # Full service DNS
+]
+
+# Disable SSL redirect since OpenShift handles TLS termination
+SECURE_SSL_REDIRECT = False
+
+# Add health check
+HEALTH_CHECK_PATH = '/health/'
+
 
 
 # Application definition
@@ -47,6 +65,7 @@ MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     #'django.middleware.csrf.CsrfViewMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -79,10 +98,12 @@ WSGI_APPLICATION = 'burgir.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': '/app/burgir/db/db.sqlite3',
+        'OPTIONS': {
+            'timeout': 20,  # Add this to prevent locking issues
+        }
     }
 }
-
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
 
@@ -140,7 +161,14 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
+# Static files (CSS, JavaScript, Images)
 STATIC_URL = 'static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+# For production, you might also want:
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
