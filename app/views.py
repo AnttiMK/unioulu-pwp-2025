@@ -9,8 +9,8 @@ from rest_framework import viewsets, filters
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from app.models import User, Table
-from app.serializers import UserSerializer, ReservationSerializer, TableSerializer
+from app.models import User, Table, Reservation, MenuItem, OrderItem, Order
+from app.serializers import UserSerializer, ReservationSerializer, TableSerializer, MenuItemSerializer, OrderItemSerializer, OrderSerializer
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -19,22 +19,7 @@ class UserViewSet(viewsets.ModelViewSet):
     """
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    filter_backends = [filters.SearchFilter]
     search_fields = ['name']
-
-    @action(detail=True, methods=['get'])
-    def reservations(self, request, pk=None):
-        """
-        Returns all reservations for a specific user.
-        """
-        user = get_object_or_404(User, pk=pk)
-        reservations = user.reservations.all()
-        serializer = ReservationSerializer(reservations, many=True)
-        return Response(serializer.data)
-
-    @method_decorator(cache_page(60 * 60)) # Cache for 1 hour
-    def list(self, request, *args, **kwargs):
-        return super().list(request, *args, **kwargs)
 
     def perform_create(self, serializer):
         serializer.save()
@@ -48,3 +33,25 @@ class TableViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save()
+
+class ReservationViewSet(viewsets.ModelViewSet):
+    queryset = Reservation.objects.all()
+    serializer_class = ReservationSerializer
+
+
+class MenuItemViewSet(viewsets.ModelViewSet):
+    queryset = MenuItem.objects.all()
+    serializer_class = MenuItemSerializer
+
+
+class OrderViewSet(viewsets.ModelViewSet):
+    queryset = Order.objects.all()
+    serializer_class = OrderSerializer
+
+    def perform_create(self, serializer):
+        serializer.save()
+
+
+class OrderItemViewSet(viewsets.ModelViewSet):
+    queryset = OrderItem.objects.all()
+    serializer_class = OrderItemSerializer
