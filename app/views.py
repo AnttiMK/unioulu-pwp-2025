@@ -20,7 +20,21 @@ class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     search_fields = ['name']
+    
+    @action(detail=True, methods=['get'])
+    def reservations(self, request, pk=None):
+        user = self.get_object()
+        reservations = user.reservations.all()
+        serializer = ReservationSerializer(reservations, many=True)
+        return Response(serializer.data)
 
+    @action(detail=True, methods=['get'])
+    def orders(self, request, pk=None):
+        user = self.get_object()
+        orders = user.orders.all()
+        serializer = OrderSerializer(orders, many=True)
+        return Response(serializer.data)
+        
     def perform_create(self, serializer):
         serializer.save()
 
