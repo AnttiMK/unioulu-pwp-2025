@@ -76,3 +76,8 @@ coverage html
 # The coverage report can be shown also on command line:
 coverage report -m --omit="*/tests/*,*/migrations/*,manage.py,settings.py,urls.py,admin.py,apps.py,__init__.py"
 ```
+
+## Client
+Link to the client repository:
+
+https://github.com/mteuhola/Burgir-Client
