@@ -1,0 +1,40 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (X11; Linux x86_64; rv:128.0) Gecko/20100101 Firefox/128.0" version="27.0.6">
+  <diagram name="Page-1" id="Cj_et55Cc973Yq7aoicT">
+    <mxGraphModel dx="1382" dy="749" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="IkJPQVbI--I5mGFeVy_s-5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontFamily=Courier New;" edge="1" parent="1" source="IkJPQVbI--I5mGFeVy_s-1" target="IkJPQVbI--I5mGFeVy_s-4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="IkJPQVbI--I5mGFeVy_s-12" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontFamily=Courier New;" edge="1" parent="1" source="IkJPQVbI--I5mGFeVy_s-1" target="IkJPQVbI--I5mGFeVy_s-3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="IkJPQVbI--I5mGFeVy_s-13" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontFamily=Courier New;" edge="1" parent="1" source="IkJPQVbI--I5mGFeVy_s-1" target="IkJPQVbI--I5mGFeVy_s-2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="IkJPQVbI--I5mGFeVy_s-1" value="Home Screen" style="rounded=1;whiteSpace=wrap;html=1;fontFamily=Courier New;fillColor=#fa6800;fontColor=#000000;strokeColor=#C73500;" vertex="1" parent="1">
+          <mxGeometry x="360" y="180" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="IkJPQVbI--I5mGFeVy_s-2" value="Admin Login" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e51400;fontColor=#ffffff;strokeColor=#B20000;fontFamily=Courier New;" vertex="1" parent="1">
+          <mxGeometry x="360" y="280" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="IkJPQVbI--I5mGFeVy_s-11" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontFamily=Courier New;" edge="1" parent="1" source="IkJPQVbI--I5mGFeVy_s-3" target="IkJPQVbI--I5mGFeVy_s-10">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="IkJPQVbI--I5mGFeVy_s-3" value="User Log in" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#0050ef;fontColor=#ffffff;strokeColor=#001DBC;fontFamily=Courier New;" vertex="1" parent="1">
+          <mxGeometry x="520" y="180" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="IkJPQVbI--I5mGFeVy_s-4" value="Menu" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#60a917;fontColor=#ffffff;strokeColor=#2D7600;fontFamily=Courier New;" vertex="1" parent="1">
+          <mxGeometry x="200" y="180" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="IkJPQVbI--I5mGFeVy_s-10" value="User Registration" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#0050ef;fontColor=#ffffff;strokeColor=#001DBC;fontFamily=Courier New;" vertex="1" parent="1">
+          <mxGeometry x="520" y="280" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="IkJPQVbI--I5mGFeVy_s-14" value="&lt;b&gt;Screens accessible to Guest user&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontFamily=Courier New;" vertex="1" parent="1">
+          <mxGeometry x="282.5" y="140" width="275" height="30" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

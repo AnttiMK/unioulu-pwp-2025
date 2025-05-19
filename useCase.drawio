@@ -1,0 +1,82 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (X11; Linux x86_64; rv:128.0) Gecko/20100101 Firefox/128.0" version="27.0.6">
+  <diagram name="Page-1" id="dFkPYEzx29vNvxIq47wv">
+    <mxGraphModel dx="1382" dy="749" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="qMA9qAyPhksx8ExccvGU-14" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontFamily=Courier New;curved=0;" edge="1" parent="1" source="qMA9qAyPhksx8ExccvGU-1" target="qMA9qAyPhksx8ExccvGU-13">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="qMA9qAyPhksx8ExccvGU-20" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.25;entryDx=0;entryDy=0;fontFamily=Courier New;curved=0;" edge="1" parent="1" source="qMA9qAyPhksx8ExccvGU-1" target="qMA9qAyPhksx8ExccvGU-6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="qMA9qAyPhksx8ExccvGU-1" value="&lt;div&gt;Guest User&lt;/div&gt;" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fontFamily=Courier New;fillColor=#60a917;fontColor=light-dark(#FFFFFF,#FFFFFF);strokeColor=#2D7600;" vertex="1" parent="1">
+          <mxGeometry x="100" y="115" width="30" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="qMA9qAyPhksx8ExccvGU-8" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontFamily=Courier New;curved=0;" edge="1" parent="1" source="qMA9qAyPhksx8ExccvGU-2" target="qMA9qAyPhksx8ExccvGU-6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="qMA9qAyPhksx8ExccvGU-35" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontFamily=Courier New;curved=0;" edge="1" parent="1" source="qMA9qAyPhksx8ExccvGU-2" target="qMA9qAyPhksx8ExccvGU-12">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="qMA9qAyPhksx8ExccvGU-36" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontFamily=Courier New;curved=0;" edge="1" parent="1" source="qMA9qAyPhksx8ExccvGU-2" target="qMA9qAyPhksx8ExccvGU-16">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="qMA9qAyPhksx8ExccvGU-37" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontFamily=Courier New;curved=0;" edge="1" parent="1" source="qMA9qAyPhksx8ExccvGU-2" target="qMA9qAyPhksx8ExccvGU-17">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="qMA9qAyPhksx8ExccvGU-38" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontFamily=Courier New;curved=0;" edge="1" parent="1" source="qMA9qAyPhksx8ExccvGU-2" target="qMA9qAyPhksx8ExccvGU-19">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="qMA9qAyPhksx8ExccvGU-2" value="&lt;div&gt;Logged in&lt;/div&gt;&lt;div&gt;User&lt;/div&gt;" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fontFamily=Courier New;fillColor=#0050ef;fontColor=light-dark(#FFFFFF,#FFFFFF);strokeColor=#001DBC;" vertex="1" parent="1">
+          <mxGeometry x="100" y="215" width="30" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="qMA9qAyPhksx8ExccvGU-30" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;fontFamily=Courier New;curved=0;" edge="1" parent="1" source="qMA9qAyPhksx8ExccvGU-3" target="qMA9qAyPhksx8ExccvGU-26">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="qMA9qAyPhksx8ExccvGU-32" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;fontFamily=Courier New;curved=0;" edge="1" parent="1" source="qMA9qAyPhksx8ExccvGU-3" target="qMA9qAyPhksx8ExccvGU-29">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="qMA9qAyPhksx8ExccvGU-40" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;fontFamily=Courier New;curved=0;" edge="1" parent="1" source="qMA9qAyPhksx8ExccvGU-3" target="qMA9qAyPhksx8ExccvGU-34">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="qMA9qAyPhksx8ExccvGU-42" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontFamily=Courier New;curved=0;" edge="1" parent="1" source="qMA9qAyPhksx8ExccvGU-3" target="qMA9qAyPhksx8ExccvGU-41">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="qMA9qAyPhksx8ExccvGU-3" value="Admin" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fontFamily=Courier New;fillColor=#e51400;fontColor=light-dark(#FFFFFF,#FFFFFF);strokeColor=#B20000;" vertex="1" parent="1">
+          <mxGeometry x="710" y="115" width="30" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="qMA9qAyPhksx8ExccvGU-6" value="&lt;div&gt;&lt;b&gt;View the Menu&lt;/b&gt;&lt;/div&gt;&lt;div&gt;GET /api/menu-items/&lt;br&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontFamily=Courier New;fillColor=#60a917;fontColor=#ffffff;strokeColor=#2D7600;" vertex="1" parent="1">
+          <mxGeometry x="210" y="200" width="200" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="qMA9qAyPhksx8ExccvGU-12" value="&lt;div&gt;&lt;b&gt;View and delete own account&lt;/b&gt;&lt;/div&gt;&lt;div&gt;GET, DELETE /api/users/ID/&lt;br&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontFamily=Courier New;fillColor=#0050ef;fontColor=#ffffff;strokeColor=#001DBC;" vertex="1" parent="1">
+          <mxGeometry x="210" y="300" width="200" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="qMA9qAyPhksx8ExccvGU-13" value="&lt;div&gt;&lt;b&gt;Create User account&lt;/b&gt;&lt;/div&gt;&lt;div&gt;POST api/users/&lt;br&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontFamily=Courier New;fillColor=#60a917;fontColor=#ffffff;strokeColor=#2D7600;" vertex="1" parent="1">
+          <mxGeometry x="210" y="100" width="200" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="qMA9qAyPhksx8ExccvGU-16" value="&lt;div&gt;&lt;b&gt;Make new orders&lt;/b&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;POST /api/orders/&lt;/div&gt;&lt;div&gt;&lt;b&gt;View own orders&lt;/b&gt;&lt;/div&gt;&lt;div&gt;GET /api/users/ID/orders/&lt;br&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontFamily=Courier New;fillColor=#0050ef;fontColor=#ffffff;strokeColor=#001DBC;" vertex="1" parent="1">
+          <mxGeometry x="210" y="400" width="200" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="qMA9qAyPhksx8ExccvGU-17" value="&lt;div&gt;&lt;b&gt;When making orders&lt;/b&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;POST /api/order-items/&lt;br&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontFamily=Courier New;fillColor=#0050ef;fontColor=#ffffff;strokeColor=#001DBC;" vertex="1" parent="1">
+          <mxGeometry x="210" y="500" width="200" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="qMA9qAyPhksx8ExccvGU-19" value="&lt;div&gt;&lt;b&gt;Make a reservation&lt;/b&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;POST /api/reservations/&lt;/div&gt;&lt;div&gt;&lt;b&gt;View own reservations&lt;/b&gt;&lt;/div&gt;&lt;div&gt;GET &lt;br&gt;&lt;/div&gt;&lt;div&gt;api/users/ID/reservations/&lt;/div&gt;&lt;div&gt;&lt;b&gt;Modify own reservations&lt;/b&gt;&lt;/div&gt;&lt;div&gt;PUT, DELETE&lt;/div&gt;&lt;div&gt;/api/users/ID/reservation/ID/&lt;br&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontFamily=Courier New;fillColor=#0050ef;fontColor=#ffffff;strokeColor=#001DBC;" vertex="1" parent="1">
+          <mxGeometry x="210" y="600" width="200" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="qMA9qAyPhksx8ExccvGU-26" value="&lt;div&gt;&lt;b&gt;Modify Menu items&lt;br&gt;&lt;/b&gt;&lt;/div&gt;&lt;div&gt;&lt;div&gt;GET, POST /api/menu-items/&lt;/div&gt;&lt;/div&gt;&lt;div&gt;DELETE /api/menu-items/ID/&lt;/div&gt;&lt;div&gt;PUT /api/menu-items/ID/&lt;br&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontFamily=Courier New;fillColor=#e51400;fontColor=#ffffff;strokeColor=#B20000;" vertex="1" parent="1">
+          <mxGeometry x="430" y="200" width="200" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="qMA9qAyPhksx8ExccvGU-29" value="&lt;div&gt;&lt;b&gt;Modify order status&lt;/b&gt;&lt;/div&gt;&lt;div&gt;GET /api/orders/&lt;br&gt;&lt;/div&gt;&lt;div&gt;PUT /api/orders/ID/&lt;br&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontFamily=Courier New;fillColor=#e51400;fontColor=#ffffff;strokeColor=#B20000;" vertex="1" parent="1">
+          <mxGeometry x="430" y="400" width="200" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="qMA9qAyPhksx8ExccvGU-34" value="&lt;div&gt;&lt;b&gt;View all reservations&lt;/b&gt;&lt;/div&gt;&lt;div&gt;GET /api/reservations/&lt;br&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontFamily=Courier New;fillColor=#e51400;fontColor=#ffffff;strokeColor=#B20000;" vertex="1" parent="1">
+          <mxGeometry x="430" y="600" width="200" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="qMA9qAyPhksx8ExccvGU-41" value="&lt;div&gt;&lt;b&gt;Manage Tables&lt;br&gt;&lt;/b&gt;&lt;/div&gt;&lt;div&gt;&lt;div&gt;GET, POST /api/tables/&lt;/div&gt;&lt;/div&gt;&lt;div&gt;DELETE /api/tables/ID/&lt;/div&gt;&lt;div&gt;PUT /api/tables/ID/&lt;br&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontFamily=Courier New;fillColor=#e51400;fontColor=#ffffff;strokeColor=#B20000;" vertex="1" parent="1">
+          <mxGeometry x="430" y="100" width="200" height="90" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

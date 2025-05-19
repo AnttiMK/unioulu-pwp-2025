@@ -1,0 +1,67 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (X11; Linux x86_64; rv:128.0) Gecko/20100101 Firefox/128.0" version="27.0.6">
+  <diagram name="Page-1" id="MzeAK9W_ekqi0emy402t">
+    <mxGraphModel dx="1382" dy="749" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="UmDhWH5C4RA5agLHZXWp-3" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontFamily=Courier New;" edge="1" parent="1" source="UmDhWH5C4RA5agLHZXWp-1" target="UmDhWH5C4RA5agLHZXWp-2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="UmDhWH5C4RA5agLHZXWp-7" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontFamily=Courier New;" edge="1" parent="1" source="UmDhWH5C4RA5agLHZXWp-1" target="UmDhWH5C4RA5agLHZXWp-6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="UmDhWH5C4RA5agLHZXWp-11" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fillColor=#e51400;strokeColor=#B20000;fontFamily=Courier New;" edge="1" parent="1" source="UmDhWH5C4RA5agLHZXWp-1" target="UmDhWH5C4RA5agLHZXWp-10">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="UmDhWH5C4RA5agLHZXWp-12" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fillColor=#e51400;strokeColor=#B20000;fontFamily=Courier New;" edge="1" parent="1" source="UmDhWH5C4RA5agLHZXWp-1" target="UmDhWH5C4RA5agLHZXWp-10">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="UmDhWH5C4RA5agLHZXWp-13" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fillColor=#e51400;strokeColor=#B20000;fontFamily=Courier New;" edge="1" parent="1" source="UmDhWH5C4RA5agLHZXWp-1" target="UmDhWH5C4RA5agLHZXWp-10">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="UmDhWH5C4RA5agLHZXWp-14" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontFamily=Courier New;" edge="1" parent="1" source="UmDhWH5C4RA5agLHZXWp-1" target="UmDhWH5C4RA5agLHZXWp-10">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="UmDhWH5C4RA5agLHZXWp-16" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontFamily=Courier New;" edge="1" parent="1" source="UmDhWH5C4RA5agLHZXWp-1" target="UmDhWH5C4RA5agLHZXWp-15">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="UmDhWH5C4RA5agLHZXWp-18" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontFamily=Courier New;" edge="1" parent="1" source="UmDhWH5C4RA5agLHZXWp-1" target="UmDhWH5C4RA5agLHZXWp-17">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="UmDhWH5C4RA5agLHZXWp-1" value="Admin panel" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e51400;fontColor=#ffffff;strokeColor=#B20000;fontFamily=Courier New;" vertex="1" parent="1">
+          <mxGeometry x="360" y="200" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="UmDhWH5C4RA5agLHZXWp-5" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontFamily=Courier New;" edge="1" parent="1" source="UmDhWH5C4RA5agLHZXWp-2" target="UmDhWH5C4RA5agLHZXWp-4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="UmDhWH5C4RA5agLHZXWp-2" value="Manage Menu" style="whiteSpace=wrap;html=1;rounded=1;fillColor=#e51400;fontColor=#ffffff;strokeColor=#B20000;fontFamily=Courier New;" vertex="1" parent="1">
+          <mxGeometry x="120" y="200" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="UmDhWH5C4RA5agLHZXWp-4" value="&lt;div&gt;Add menu item&lt;/div&gt;&lt;div&gt;(pop-up)&lt;br&gt;&lt;/div&gt;" style="whiteSpace=wrap;html=1;rounded=1;fillColor=#e51400;fontColor=#ffffff;strokeColor=#B20000;fontFamily=Courier New;" vertex="1" parent="1">
+          <mxGeometry x="120" y="340" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="UmDhWH5C4RA5agLHZXWp-9" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontFamily=Courier New;" edge="1" parent="1" source="UmDhWH5C4RA5agLHZXWp-6" target="UmDhWH5C4RA5agLHZXWp-8">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="UmDhWH5C4RA5agLHZXWp-6" value="Manage Tables" style="whiteSpace=wrap;html=1;rounded=1;fillColor=#e51400;fontColor=#ffffff;strokeColor=#B20000;fontFamily=Courier New;" vertex="1" parent="1">
+          <mxGeometry x="600" y="200" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="UmDhWH5C4RA5agLHZXWp-8" value="&lt;div&gt;Add table&lt;/div&gt;&lt;div&gt;(pop-up)&lt;br&gt;&lt;/div&gt;" style="whiteSpace=wrap;html=1;rounded=1;fillColor=#e51400;fontColor=#ffffff;strokeColor=#B20000;fontFamily=Courier New;" vertex="1" parent="1">
+          <mxGeometry x="600" y="340" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="UmDhWH5C4RA5agLHZXWp-10" value="Manage Orders" style="whiteSpace=wrap;html=1;rounded=1;fillColor=#e51400;fontColor=#ffffff;strokeColor=#B20000;fontFamily=Courier New;" vertex="1" parent="1">
+          <mxGeometry x="280" y="340" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="UmDhWH5C4RA5agLHZXWp-15" value="&lt;div&gt;Manage&lt;/div&gt;&lt;div&gt;Reservations&lt;br&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e51400;fontColor=#ffffff;strokeColor=#B20000;fontFamily=Courier New;" vertex="1" parent="1">
+          <mxGeometry x="440" y="340" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="UmDhWH5C4RA5agLHZXWp-17" value="Home Screen" style="whiteSpace=wrap;html=1;fillColor=#fa6800;strokeColor=#C73500;fontColor=#000000;rounded=1;fontFamily=Courier New;" vertex="1" parent="1">
+          <mxGeometry x="360" y="100" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="UmDhWH5C4RA5agLHZXWp-19" value="&lt;b&gt;&lt;font face=&quot;Courier New&quot;&gt;Screen&#39;s accessible to Admin user&lt;/font&gt;&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="270" y="60" width="300" height="30" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
