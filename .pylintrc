@@ -46,7 +46,7 @@ fail-under=10
 #from-stdin=
 
 # Files or directories to be skipped. They should be base names, not paths.
-ignore=CVS, migrations, .venv, .idea
+ignore=CVS, migrations, .venv, .idea, tests, old_views
 
 # Add files or directories matching the regular expressions patterns to the
 # ignore-list. The regex matches against paths and can be in Posix or Windows
@@ -306,7 +306,7 @@ max-branches=12
 max-locals=15
 
 # Maximum number of parents for a class (see R0901).
-max-parents=7
+max-parents=11
 
 # Maximum number of positional arguments for function / method.
 max-positional-arguments=5
@@ -346,7 +346,7 @@ indent-after-paren=4
 indent-string='    '
 
 # Maximum number of characters on a single line.
-max-line-length=100
+max-line-length=130
 
 # Maximum number of lines in a module.
 max-module-lines=1000

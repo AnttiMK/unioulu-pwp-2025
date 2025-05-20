@@ -100,10 +100,7 @@ WSGI_APPLICATION = 'burgir.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': '/app/burgir/db/db.sqlite3',
-        'OPTIONS': {
-            'timeout': 20,  # Add this to prevent locking issues
-        }
+        'NAME': 'db.sqlite3'
     }
 }
 # Password validation
@@ -140,7 +137,11 @@ REST_FRAMEWORK = {
 # https://drf-spectacular.readthedocs.io/en/latest/settings.html
 SPECTACULAR_SETTINGS = {
     'TITLE': 'Burgir API',
-    'DESCRIPTION': 'API for Burgir',
+    'DESCRIPTION': 'API for Burgir Restaurant Orger Management System, a University of Oulu course project.',
+    'CONTACT': {
+        'name': 'GitHub',
+        'url': 'https://github.com/AnttiMK/unioulu-pwp-2025',
+    },
     'VERSION': '1.0.0',
     'SERVE_INCLUDE_SCHEMA': False,
     'SCHEMA_PATH_PREFIX': '/api/v1/',
