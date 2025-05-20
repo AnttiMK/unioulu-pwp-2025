@@ -2,21 +2,25 @@ openapi: 3.0.3
 info:
   title: Burgir API
   version: 1.0.0
-  description: API for Burgir
+  description: API for Burgir Restaurant Management System
+  contact:
+    name: GitHub
+    url: https://github.com/AnttiMK/unioulu-pwp-2025
 paths:
-  /users/:
+  /api/menu-items/:
     get:
-      operationId: users_list
-      description: Handles requests for the users endpoint.
+      operationId: api_menu_items_list
+      description: Retrieve a paginated list of all menu items.
+      summary: List menu items
       parameters:
-      - name: search
+      - name: page
         required: false
         in: query
-        description: A search term.
+        description: A page number within the paginated result set.
         schema:
-          type: string
+          type: integer
       tags:
-      - users
+      - api
       security:
       - cookieAuth: []
       - basicAuth: []
@@ -26,15 +30,959 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/User'
+                $ref: '#/components/schemas/PaginatedMenuItemList'
           description: ''
     post:
-      operationId: users_create
-      description: Handles requests for the users endpoint.
+      operationId: api_menu_items_create
+      description: Create a new menu item with the provided details.
+      summary: Create menu item
       tags:
-      - users
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MenuItemRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/MenuItemRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/MenuItemRequest'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MenuItem'
+          description: ''
+        '400':
+          description: No response body
+  /api/menu-items/{id}/:
+    get:
+      operationId: api_menu_items_retrieve
+      description: Get details of a specific menu item by ID.
+      summary: Retrieve menu item
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this menu item.
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MenuItem'
+          description: ''
+        '404':
+          description: No response body
+    put:
+      operationId: api_menu_items_update
+      description: Update all fields of a menu item.
+      summary: Update menu item
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this menu item.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MenuItemRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/MenuItemRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/MenuItemRequest'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MenuItem'
+          description: ''
+        '400':
+          description: No response body
+        '404':
+          description: No response body
+    patch:
+      operationId: api_menu_items_partial_update
+      description: Update one or more fields of a menu item.
+      summary: Partially update menu item
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this menu item.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedMenuItemRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedMenuItemRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedMenuItemRequest'
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MenuItem'
+          description: ''
+        '400':
+          description: No response body
+        '404':
+          description: No response body
+    delete:
+      operationId: api_menu_items_destroy
+      description: Delete a menu item by ID.
+      summary: Delete menu item
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this menu item.
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '204':
+          description: No response body
+        '404':
+          description: No response body
+  /api/order-items/:
+    get:
+      operationId: api_order_items_list
+      description: Retrieve a paginated list of all order items.
+      summary: List order items
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedOrderItemList'
+          description: ''
+    post:
+      operationId: api_order_items_create
+      description: Create a new order item with the provided details.
+      summary: Create order item
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderItemRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/OrderItemRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/OrderItemRequest'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderItem'
+          description: ''
+        '400':
+          description: No response body
+  /api/order-items/{id}/:
+    get:
+      operationId: api_order_items_retrieve
+      description: Get details of a specific order item by ID.
+      summary: Retrieve order item
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this order item.
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderItem'
+          description: ''
+        '404':
+          description: No response body
+    put:
+      operationId: api_order_items_update
+      description: Update all fields of an order item.
+      summary: Update order item
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this order item.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderItemRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/OrderItemRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/OrderItemRequest'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderItem'
+          description: ''
+        '400':
+          description: No response body
+        '404':
+          description: No response body
+    patch:
+      operationId: api_order_items_partial_update
+      description: Update one or more fields of an order item.
+      summary: Partially update order item
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this order item.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedOrderItemRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedOrderItemRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedOrderItemRequest'
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderItem'
+          description: ''
+        '400':
+          description: No response body
+        '404':
+          description: No response body
+    delete:
+      operationId: api_order_items_destroy
+      description: Delete an order item by ID.
+      summary: Delete order item
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this order item.
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '204':
+          description: No response body
+        '404':
+          description: No response body
+  /api/orders/:
+    get:
+      operationId: api_orders_list
+      description: Retrieve a paginated list of all orders.
+      summary: List orders
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedOrderList'
+          description: ''
+    post:
+      operationId: api_orders_create
+      description: Create a new order with the provided details.
+      summary: Create order
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/OrderRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/OrderRequest'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+          description: ''
+        '400':
+          description: No response body
+  /api/orders/{id}/:
+    get:
+      operationId: api_orders_retrieve
+      description: Get details of a specific order by ID.
+      summary: Retrieve order
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this order.
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+          description: ''
+        '404':
+          description: No response body
+    put:
+      operationId: api_orders_update
+      description: Update all fields of an order.
+      summary: Update order
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this order.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/OrderRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/OrderRequest'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+          description: ''
+        '400':
+          description: No response body
+        '404':
+          description: No response body
+    patch:
+      operationId: api_orders_partial_update
+      description: Update one or more fields of an order.
+      summary: Partially update order
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this order.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedOrderRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedOrderRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedOrderRequest'
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+          description: ''
+        '400':
+          description: No response body
+        '404':
+          description: No response body
+    delete:
+      operationId: api_orders_destroy
+      description: Delete an order by ID.
+      summary: Delete order
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this order.
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '204':
+          description: No response body
+        '404':
+          description: No response body
+  /api/reservations/:
+    get:
+      operationId: api_reservations_list
+      description: Retrieve a paginated list of all reservations.
+      summary: List reservations
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedReservationList'
+          description: ''
+    post:
+      operationId: api_reservations_create
+      description: Create a new reservation with the provided details.
+      summary: Create reservation
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReservationRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ReservationRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ReservationRequest'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Reservation'
+          description: ''
+        '400':
+          description: No response body
+  /api/reservations/{id}/:
+    get:
+      operationId: api_reservations_retrieve
+      description: Get details of a specific reservation by ID.
+      summary: Retrieve reservation
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this reservation.
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Reservation'
+          description: ''
+        '404':
+          description: No response body
+    put:
+      operationId: api_reservations_update
+      description: Update all fields of a reservation.
+      summary: Update reservation
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this reservation.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReservationRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ReservationRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ReservationRequest'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Reservation'
+          description: ''
+        '400':
+          description: No response body
+        '404':
+          description: No response body
+    patch:
+      operationId: api_reservations_partial_update
+      description: Update one or more fields of a reservation.
+      summary: Partially update reservation
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this reservation.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedReservationRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedReservationRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedReservationRequest'
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Reservation'
+          description: ''
+        '400':
+          description: No response body
+        '404':
+          description: No response body
+    delete:
+      operationId: api_reservations_destroy
+      description: Delete a reservation by ID.
+      summary: Delete reservation
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this reservation.
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '204':
+          description: No response body
+        '404':
+          description: No response body
+  /api/tables/:
+    get:
+      operationId: api_tables_list
+      description: Retrieve a paginated list of all tables.
+      summary: List tables
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedTableList'
+          description: ''
+    post:
+      operationId: api_tables_create
+      description: Create a new table with the provided details.
+      summary: Create table
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TableRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TableRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TableRequest'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Table'
+          description: ''
+        '400':
+          description: No response body
+  /api/tables/{id}/:
+    get:
+      operationId: api_tables_retrieve
+      description: Get details of a specific table by ID.
+      summary: Retrieve table
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this table.
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Table'
+          description: ''
+        '404':
+          description: No response body
+    put:
+      operationId: api_tables_update
+      description: Update all fields of a table.
+      summary: Update table
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this table.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TableRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TableRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TableRequest'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Table'
+          description: ''
+        '400':
+          description: No response body
+        '404':
+          description: No response body
+    patch:
+      operationId: api_tables_partial_update
+      description: Update one or more fields of a table.
+      summary: Partially update table
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this table.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedTableRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedTableRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedTableRequest'
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Table'
+          description: ''
+        '400':
+          description: No response body
+        '404':
+          description: No response body
+    delete:
+      operationId: api_tables_destroy
+      description: Delete a table by ID.
+      summary: Delete table
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this table.
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '204':
+          description: No response body
+        '404':
+          description: No response body
+  /api/tables/{id}/reservations/:
+    get:
+      operationId: api_tables_reservations_retrieve
+      description: Retrieve all reservations for a specific table.
+      summary: List table reservations
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this table.
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Reservation'
+          description: ''
+  /api/users/:
+    get:
+      operationId: api_users_list
+      description: Retrieve a paginated list of all users.
+      summary: List users
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedUserList'
+          description: ''
+    post:
+      operationId: api_users_create
+      description: Create a new user with the provided information.
+      summary: Create user
+      tags:
+      - api
       requestBody:
         content:
           application/json:
@@ -58,10 +1006,13 @@ paths:
               schema:
                 $ref: '#/components/schemas/User'
           description: ''
-  /users/{id}/:
+        '400':
+          description: No response body
+  /api/users/{id}/:
     get:
-      operationId: users_retrieve
-      description: Handles requests for the users endpoint.
+      operationId: api_users_retrieve
+      description: Get details of a specific user by ID.
+      summary: Retrieve user
       parameters:
       - in: path
         name: id
@@ -70,7 +1021,7 @@ paths:
         description: A unique integer value identifying this user.
         required: true
       tags:
-      - users
+      - api
       security:
       - cookieAuth: []
       - basicAuth: []
@@ -82,9 +1033,12 @@ paths:
               schema:
                 $ref: '#/components/schemas/User'
           description: ''
+        '404':
+          description: No response body
     put:
-      operationId: users_update
-      description: Handles requests for the users endpoint.
+      operationId: api_users_update
+      description: Update all fields of a user.
+      summary: Update user
       parameters:
       - in: path
         name: id
@@ -93,7 +1047,7 @@ paths:
         description: A unique integer value identifying this user.
         required: true
       tags:
-      - users
+      - api
       requestBody:
         content:
           application/json:
@@ -117,9 +1071,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/User'
           description: ''
+        '400':
+          description: No response body
+        '404':
+          description: No response body
     patch:
-      operationId: users_partial_update
-      description: Handles requests for the users endpoint.
+      operationId: api_users_partial_update
+      description: Update one or more fields of a user.
+      summary: Partially update user
       parameters:
       - in: path
         name: id
@@ -128,7 +1087,7 @@ paths:
         description: A unique integer value identifying this user.
         required: true
       tags:
-      - users
+      - api
       requestBody:
         content:
           application/json:
@@ -151,9 +1110,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/User'
           description: ''
+        '400':
+          description: No response body
+        '404':
+          description: No response body
     delete:
-      operationId: users_destroy
-      description: Handles requests for the users endpoint.
+      operationId: api_users_destroy
+      description: Delete a user by ID.
+      summary: Delete user
       parameters:
       - in: path
         name: id
@@ -162,7 +1126,7 @@ paths:
         description: A unique integer value identifying this user.
         required: true
       tags:
-      - users
+      - api
       security:
       - cookieAuth: []
       - basicAuth: []
@@ -170,18 +1134,13 @@ paths:
       responses:
         '204':
           description: No response body
-  /users/{id}/reservations/:
+        '404':
+          description: No response body
+  /api/users/{id}/orders/:
     get:
-      operationId: users_reservations_retrieve
-      description: |-
-        Returns all reservations for a specific user.
-
-        Args:
-            request (HttpRequest): Django HTTP request object
-            pk (int): User ID
-
-        Returns:
-            JsonResponse: JSON containing the user's reservations
+      operationId: api_users_orders_retrieve
+      description: Retrieve all orders for a specific user.
+      summary: List user orders
       parameters:
       - in: path
         name: id
@@ -190,7 +1149,7 @@ paths:
         description: A unique integer value identifying this user.
         required: true
       tags:
-      - users
+      - api
       security:
       - cookieAuth: []
       - basicAuth: []
@@ -200,19 +1159,468 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
+                $ref: '#/components/schemas/Order'
+          description: ''
+  /api/users/{id}/reservations/:
+    get:
+      operationId: api_users_reservations_retrieve
+      description: Retrieve all reservations for a specific user.
+      summary: List user reservations
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this user.
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Reservation'
           description: ''
 components:
   schemas:
-    PatchedUserRequest:
+    MenuItem:
       type: object
+      description: Serializer for the MenuItem model.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 64
+        description:
+          type: string
+          maxLength: 255
+        type:
+          type: string
+          maxLength: 20
+        price:
+          type: number
+          format: double
+      required:
+      - description
+      - id
+      - name
+      - price
+    MenuItemRequest:
+      type: object
+      description: Serializer for the MenuItem model.
       properties:
         name:
           type: string
           minLength: 1
           maxLength: 64
+        description:
+          type: string
+          minLength: 1
+          maxLength: 255
+        type:
+          type: string
+          minLength: 1
+          maxLength: 20
+        price:
+          type: number
+          format: double
+      required:
+      - description
+      - name
+      - price
+    Order:
+      type: object
+      description: Serializer for the Order model.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        status:
+          type: string
+          maxLength: 64
+        user_id:
+          type: integer
+        order_items:
+          type: array
+          items:
+            type: integer
+      required:
+      - id
+      - order_items
+      - status
+      - user_id
+    OrderItem:
+      type: object
+      description: Serializer for the OrderItem model.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        amount:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          format: int64
+        item_id:
+          type: integer
+      required:
+      - amount
+      - id
+      - item_id
+    OrderItemRequest:
+      type: object
+      description: Serializer for the OrderItem model.
+      properties:
+        amount:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          format: int64
+        item_id:
+          type: integer
+      required:
+      - amount
+      - item_id
+    OrderRequest:
+      type: object
+      description: Serializer for the Order model.
+      properties:
+        status:
+          type: string
+          minLength: 1
+          maxLength: 64
+        user_id:
+          type: integer
+        order_items:
+          type: array
+          items:
+            type: integer
+      required:
+      - order_items
+      - status
+      - user_id
+    PaginatedMenuItemList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/MenuItem'
+    PaginatedOrderItemList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderItem'
+    PaginatedOrderList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Order'
+    PaginatedReservationList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Reservation'
+    PaginatedTableList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Table'
+    PaginatedUserList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
+    PatchedMenuItemRequest:
+      type: object
+      description: Serializer for the MenuItem model.
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 64
+        description:
+          type: string
+          minLength: 1
+          maxLength: 255
+        type:
+          type: string
+          minLength: 1
+          maxLength: 20
+        price:
+          type: number
+          format: double
+    PatchedOrderItemRequest:
+      type: object
+      description: Serializer for the OrderItem model.
+      properties:
+        amount:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          format: int64
+        item_id:
+          type: integer
+    PatchedOrderRequest:
+      type: object
+      description: Serializer for the Order model.
+      properties:
+        status:
+          type: string
+          minLength: 1
+          maxLength: 64
+        user_id:
+          type: integer
+        order_items:
+          type: array
+          items:
+            type: integer
+    PatchedReservationRequest:
+      type: object
+      description: Serializer for the Reservation model.
+      properties:
+        user:
+          type: integer
+        table:
+          type: integer
+        number_of_people:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 1
+          format: int64
+        date_and_time:
+          type: string
+          format: date-time
+        duration:
+          type: string
+    PatchedTableRequest:
+      type: object
+      description: Serializer for the Table model.
+      properties:
+        min_people:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          format: int64
+        max_people:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          format: int64
+    PatchedUserRequest:
+      type: object
+      description: Serializer for the User model.
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 64
+    Reservation:
+      type: object
+      description: Serializer for the Reservation model.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        user:
+          type: integer
+        table:
+          type: integer
+        number_of_people:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 1
+          format: int64
+        date_and_time:
+          type: string
+          format: date-time
+        duration:
+          type: string
+      required:
+      - date_and_time
+      - duration
+      - id
+      - number_of_people
+      - table
+      - user
+    ReservationRequest:
+      type: object
+      description: Serializer for the Reservation model.
+      properties:
+        user:
+          type: integer
+        table:
+          type: integer
+        number_of_people:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 1
+          format: int64
+        date_and_time:
+          type: string
+          format: date-time
+        duration:
+          type: string
+      required:
+      - date_and_time
+      - duration
+      - number_of_people
+      - table
+      - user
+    Table:
+      type: object
+      description: Serializer for the Table model.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        min_people:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          format: int64
+        max_people:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          format: int64
+      required:
+      - id
+      - max_people
+      - min_people
+    TableRequest:
+      type: object
+      description: Serializer for the Table model.
+      properties:
+        min_people:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          format: int64
+        max_people:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          format: int64
+      required:
+      - max_people
+      - min_people
     User:
       type: object
+      description: Serializer for the User model.
       properties:
         id:
           type: integer
@@ -225,6 +1633,7 @@ components:
       - name
     UserRequest:
       type: object
+      description: Serializer for the User model.
       properties:
         name:
           type: string
